@@ -33,7 +33,7 @@
 \corresp{Corresponding author: Lucas B. Rhode (e-mail: lrh@certi.org.br)}
 
 \begin{abstract}
-    This paper presents a modified version of a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications and inserts it into a energy management algorithm of a microgrid (MG). The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is then incorporated into a energy management algorithm to optimize the operation of a grid-connected MG using a day-ahead planning strategy. To test the model, four simulated scenarios are considered and include a diesel generator, a photovoltaic (PV) system, a residential load and, naturally, a battery storage system (BESS). The inclusion of the battery wear model lead the optimizer to be more selective about battery usage, cycling the battery at SOC levels that minimized battery wear, effectively prolonging its lifespan.
+    This paper proposes a novel battery wear model for microgrid (MG) energy management applications. This model is based on a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications. The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is incorporated into an energy management algorithm to optimize the operation of a grid-connected MG using a day-ahead planning strategy. To test the model, four simulated scenarios are considered in a MG composed of a diesel generator, a photovoltaic (PV) system, a residential load and, naturally, a battery storage system (BESS). The inclusion of the battery wear model leads the optimizer to be more selective about battery usage, cycling the battery at SOC levels that minimized battery wear, effectively prolonging its lifespan.
 \end{abstract}
 
 \begin{keywords}
@@ -46,7 +46,7 @@
 
 \section{Introduction}
 \label{sec:introduction}
-    \PARstart{I}{nterest} in distributed generation (DG) has been steadily increasing in recent years. Especially in the last decade, the share of renewable energy resources in power networks has been increasing rapidly under the leadership of wind and photovoltaic (PV) power \cite{KOCER2019}. These sources, however, are intermittent by nature, as their power output is directly influenced by weather conditions that may vary vastly throughout the day. In this scenario, battery energy storage systems (BESS) are presented as a way to regulate this uneven generation pattern, benefiting from the benefits of renewable sources while maintaining grid stability.
+    \PARstart{I}{nterest} in distributed generation (DG) has been steadily increasing in recent years. Especially in the last decade, the share of renewable energy resources in power networks has been increasing rapidly under the leadership of wind and photovoltaic (PV) power \cite{KOCER2019}. These sources, however, are intermittent by nature, as their power output is directly influenced by weather conditions that may vary vastly throughout the day. In this scenario, battery energy storage systems (BESS) are presented as a way to regulate this uneven generation pattern, taking advantage of the benefits of renewable sources while maintaining grid stability.
 
     %	\footnote{batteries that are no longer suitable for powering vehicles but are still fit for other applications, such as BESS.}
 
@@ -54,7 +54,7 @@
 
     In this scenario, MGs are presented as a way to coordinate the active and reactive power of DERs --- such as generators, storage and controllable loads --- in an optimized manner, satisfying economical and technical objectives.
 
-    Still, the implementation of a MG is still associated with high upfront investments, particularly regarding the BESS. In spite of the estimated 87\% reduction in lithium-ion battery prices from 2010 to 2019 \cite{BBERG2019}, the cost of raw materials still poses a limiting factor on how cheap this technology can get \cite{HSIEH2019}. Thus, as these equipment require considerable investments, the prolongation of their lifespan is crucial to the optimal operation and viability of DG.
+    However, the implementation of a MG is still associated with high upfront investments, particularly regarding the BESS. In spite of the estimated 87\% reduction in lithium-ion battery prices from 2010 to 2019 \cite{BBERG2019}, the cost of raw materials still poses a limiting factor on how cheap this technology can get \cite{HSIEH2019}. Thus, as these equipment require considerable investments, the prolongation of their lifespan is crucial to the optimal operation and viability of DG.
 
     Studies \cite{ECKER2014,NARAYAN2018,DIMEASHATZIARGYRIOU2005,MARYAMA2013} present models based on predefined usage conditions, electrochemistry and techniques such as rain-flow cycle counting to address the problem of battery wear and life expectancy. However, most models expect detailed specifications and experimental data about the batteries that are usually not available or are too expensive to run in large scale.
 
@@ -75,9 +75,9 @@
     Therefore, by solving this integral we will be able to find a closed-form expression to calculate the wear cost of a single charge or discharge event using only two inputs: starting and final SOC.
 
     \subsection{Battery cycle life}
-    Lithium-ion batteries do not suffer from ``sudden-death'' failure. Instead they exhibit a gradual decrease in performance over their service life. The end of life might be defined as a reduction in capacity (typically 20 to 30\%) or increase in internal resistance, which may be particularly important in power applications. For example, in \cite{ECKER2014} it is characterized either by battery capacity falling under 70\% of the original or when its internal resistance triples; in \cite{NARAYAN2018} the thresholds are 80\% of the original capacity or 80\% of the state of health, an indicator of overall battery performance.
+    Lithium-ion batteries do not suffer from ``sudden-death'' failure. Instead they exhibit a gradual decrease in performance over their service life. The end of life might be defined as a reduction in capacity (typically 20 to 30\%) or an increase in internal resistance, which may be particularly important in power applications. For example, in \cite{ECKER2014} it is characterized either by battery capacity falling under 70\% of the original or when its internal resistance triples; in \cite{NARAYAN2018} the thresholds are 80\% of the original capacity or 80\% of the state of health, an indicator of overall battery performance.
 
-    Most manufacturers inform battery life in terms of achievable cycle count, that is, the number of charge/discharge events that a battery support before becoming unsuitable for a given application. In this context, each cycle is composed by a discharge, beginning at 100\%, followed by a recharge until 100\%. As illustrated by Fig. \ref{fig:acc_curves1}, batteries have cycle lives that decay exponentially with higher DOD levels.
+    Most manufacturers inform battery life in terms of achievable cycle count, that is, the number of charge/discharge events that a battery support before becoming unsuitable for a given application. In this context, each cycle is composed by a discharge, beginning at 100\%, followed by a recharge until 100\%. As illustrated in Fig. \ref{fig:acc_curves1}, batteries have cycle lives that decay exponentially with higher DOD levels.
 
     \begin{figure}[htbp]
         \centering
@@ -86,7 +86,7 @@
         \label{fig:acc_curves1}
     \end{figure}
 
-    Note that DOD is defined as the difference between the initial and final SOC, being positive for discharging and negative for recharging. In this formulation it will be represented by the symbol $d$:
+    Note that DOD is defined as the difference between the initial and final SOC, being positive for discharging and negative for recharging. In this formulation it will be represented by $d$:
     \begin{equation}
         d = s_{0}-s_{f}
         \label{eq:dod(s)}
