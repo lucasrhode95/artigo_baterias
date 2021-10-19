@@ -1,4 +1,9 @@
 \documentclass{ieeeaccess}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
@@ -10,56 +15,29 @@
 \history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
 \doi{10.1109/ACCESS.2017.DOI}
 
-\title{Preparation of Papers for IEEE ACCESS}
-\author{\uppercase{First A. Author}\authorrefmark{1}, \IEEEmembership{Fellow, IEEE},
-\uppercase{Second B. Author\authorrefmark{2}, and Third C. Author,
-Jr}.\authorrefmark{3},
-\IEEEmembership{Member, IEEE}}
-\address[1]{National Institute of Standards and 
-Technology, Boulder, CO 80305 USA (e-mail: author@boulder.nist.gov)}
-\address[2]{Department of Physics, Colorado State University, Fort Collins, 
-CO 80523 USA (e-mail: author@lamar.colostate.edu)}
-\address[3]{Electrical Engineering Department, University of Colorado, Boulder, CO 
-80309 USA}
-\tfootnote{This paragraph of the first footnote will contain support 
-information, including sponsor and financial support acknowledgment. For 
-example, ``This work was supported in part by the U.S. Department of 
-Commerce under Grant BS123456.''}
+\title{Battery Wear Model Applied to BESS Optimization in Microgrids}
+
+\author{
+	\uppercase{Lucas B. Rhode}\authorrefmark{1},
+	\uppercase{Adriano B. de Almeida}\authorrefmark{2}
+	\uppercase{and Marcos A. Izumida}\authorrefmark{3}
+}
+\address[1]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: lrh@certi.org.br)}
+\address[2]{Western Parana State University, Brazil (e-mail: adriano.almeida@unioeste.br)}
+\address[3]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: mlz@certi.org.br)}
 
 \markboth
 {Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
 {Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
 
-\corresp{Corresponding author: First A. Author (e-mail: author@ boulder.nist.gov).}
+\corresp{Corresponding author: Lucas B. Rhode (e-mail: lrh@certi.org.br)}
 
 \begin{abstract}
-These instructions give you guidelines for preparing papers for 
-IEEE Access. Use this document as a template if you are 
-using \LaTeX. Otherwise, use this document as an 
-instruction set. The electronic file of your paper will be formatted further 
-at IEEE. Paper titles should be written in uppercase and lowercase letters, 
-not all uppercase. Avoid writing long formulas with subscripts in the title; 
-short formulas that identify the elements are fine (e.g., "Nd--Fe--B"). Do 
-not write ``(Invited)'' in the title. Full names of authors are preferred in 
-the author field, but are not required. Put a space between authors' 
-initials. The abstract must be a concise yet comprehensive reflection of 
-what is in your article. In particular, the abstract must be self-contained, 
-without abbreviations, footnotes, or references. It should be a microcosm of 
-the full article. The abstract must be between 150--250 words. Be sure that 
-you adhere to these limits; otherwise, you will need to edit your abstract 
-accordingly. The abstract must be written as one paragraph, and should not 
-contain displayed mathematical equations or tabular material. The abstract 
-should include three or four different keywords or phrases, as this will 
-help readers to find it. It is important to avoid over-repetition of such 
-phrases as this can result in a page being rejected by search engines. 
-Ensure that your abstract reads well and is grammatically correct.
+    This paper presents a modified version of a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications and inserts it into a energy management algorithm of a microgrid (MG). The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is then incorporated into a energy management algorithm to optimize the operation of a grid-connected MG using a day-ahead planning strategy. To test the model, four simulated scenarios are considered and include a diesel generator, a photovoltaic (PV) system, a residential load and, naturally, a battery storage system (BESS). The inclusion of the battery wear model lead the optimizer to be more selective about battery usage, cycling the battery at SOC levels that minimized battery wear, effectively prolonging its lifespan.
 \end{abstract}
 
 \begin{keywords}
-Enter key words or phrases in alphabetical 
-order, separated by commas. For a list of suggested keywords, send a blank 
-e-mail to keywords@ieee.org or visit \underline
-{http://www.ieee.org/organizations/pubs/ani\_prod/keywrd98.txt}
+    battery management systems, energy storage, energy management, microgrids
 \end{keywords}
 
 \titlepgskip=-15pt
@@ -68,829 +46,328 @@ e-mail to keywords@ieee.org or visit \underline
 
 \section{Introduction}
 \label{sec:introduction}
-\PARstart{T}{his} document is a template for \LaTeX. If you are 
-reading a paper or PDF version of this document, please download the 
-electronic file, trans\_jour.tex, from the IEEE Web site at \underline
-{http://ieeeauthorcenter.ieee.org/create-your-ieee-article/}\break\underline{use-authoring-tools-and-ieee-article-templates/ieee-article-}\break\underline{templates/} so you can use it to prepare your manuscript. If 
-you would prefer to use LaTeX, download IEEE's LaTeX style and sample files 
-from the same Web page. You can also explore using the Overleaf editor at 
-\underline
-{https://www.overleaf.com/blog/278-how-to-use-overleaf-}\break\underline{with-ieee-collabratec-your-quick-guide-to-getting-started}\break\underline{\#.xsVp6tpPkrKM9}
-
-If your paper is intended for a conference, please contact your conference 
-editor concerning acceptable word processor formats for your particular 
-conference. 
-
-IEEE will do the final formatting of your paper. If your paper is intended 
-for a conference, please observe the conference page limits. 
-
-\subsection{Abbreviations and Acronyms}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have already been defined in the abstract. Abbreviations 
-such as IEEE, SI, ac, and dc do not have to be defined. Abbreviations that 
-incorporate periods should not have spaces: write ``C.N.R.S.,'' not ``C. N. 
-R. S.'' Do not use abbreviations in the title unless they are unavoidable 
-(for example, ``IEEE'' in the title of this article).
-
-\subsection{Other Recommendations}
-Use one space after periods and colons. Hyphenate complex modifiers: 
-``zero-field-cooled magnetization.'' Avoid dangling participles, such as, 
-``Using \eqref{eq}, the potential was calculated.'' [It is not clear who or what 
-used \eqref{eq}.] Write instead, ``The potential was calculated by using \eqref{eq},'' or 
-``Using \eqref{eq}, we calculated the potential.''
-
-Use a zero before decimal points: ``0.25,'' not ``.25.'' Use 
-``cm$^{3}$,'' not ``cc.'' Indicate sample dimensions as ``0.1 cm 
-$\times $ 0.2 cm,'' not ``0.1 $\times $ 0.2 cm$^{2}$.'' The 
-abbreviation for ``seconds'' is ``s,'' not ``sec.'' Use 
-``Wb/m$^{2}$'' or ``webers per square meter,'' not 
-``webers/m$^{2}$.'' When expressing a range of values, write ``7 to 
-9'' or ``7--9,'' not ``7$\sim $9.''
-
-A parenthetical statement at the end of a sentence is punctuated outside of 
-the closing parenthesis (like this). (A parenthetical sentence is punctuated 
-within the parentheses.) In American English, periods and commas are within 
-quotation marks, like ``this period.'' Other punctuation is ``outside''! 
-Avoid contractions; for example, write ``do not'' instead of ``don't.'' The 
-serial comma is preferred: ``A, B, and C'' instead of ``A, B and C.''
-
-If you wish, you may write in the first person singular or plural and use 
-the active voice (``I observed that $\ldots$'' or ``We observed that $\ldots$'' 
-instead of ``It was observed that $\ldots$''). Remember to check spelling. If 
-your native language is not English, please get a native English-speaking 
-colleague to carefully proofread your paper.
-
-Try not to use too many typefaces in the same article. You're writing
-scholarly papers, not ransom notes. Also please remember that MathJax
-can't handle really weird typefaces.
-
-\subsection{Equations}
-Number equations consecutively with equation numbers in parentheses flush 
-with the right margin, as in \eqref{eq}. To make your equations more 
-compact, you may use the solidus (~/~), the exp function, or appropriate 
-exponents. Use parentheses to avoid ambiguities in denominators. Punctuate 
-equations when they are part of a sentence, as in
-\begin{equation}E=mc^2.\label{eq}\end{equation}
-
-Be sure that the symbols in your equation have been defined before the 
-equation appears or immediately following. Italicize symbols ($T$ might refer 
-to temperature, but T is the unit tesla). Refer to ``\eqref{eq},'' not ``Eq. \eqref{eq}'' 
-or ``equation \eqref{eq},'' except at the beginning of a sentence: ``Equation \eqref{eq} 
-is $\ldots$ .''
-
-\subsection{\LaTeX-Specific Advice}
-
-Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
-of ``hard'' references (e.g., \verb|(1)|). That will make it possible
-to combine sections, add equations, or change the order of figures or
-citations without having to go through the file line by line.
-
-Please don't use the \verb|{eqnarray}| equation environment. Use
-\verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
-environment leaves unsightly spaces around relation symbols.
-
-Please note that the \verb|{subequations}| environment in {\LaTeX}
-will increment the main equation counter even when there are no
-equation numbers displayed. If you forget that, you might write an
-article in which the equation numbers skip from (17) to (20), causing
-the copy editors to wonder if you've discovered a new method of
-counting.
-
-{\BibTeX} does not work by magic. It doesn't get the bibliographic
-data from thin air but from .bib files. If you use {\BibTeX} to produce a
-bibliography you must send the .bib files. 
-
-{\LaTeX} can't read your mind. If you assign the same label to a
-subsubsection and a table, you might find that Table I has been cross
-referenced as Table IV-B3. 
-
-{\LaTeX} does not have precognitive abilities. If you put a
-\verb|\label| command before the command that updates the counter it's
-supposed to be using, the label will pick up the last counter to be
-cross referenced instead. In particular, a \verb|\label| command
-should not go before the caption of a figure or a table.
-
-Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
-will not stop equation numbers inside \verb|{array}| (there won't be
-any anyway) and it might stop a wanted equation number in the
-surrounding equation.
-
-\section{Units}
-Use either SI (MKS) or CGS as primary units. (SI units are strongly 
-encouraged.) English units may be used as secondary units (in parentheses). 
-This applies to papers in data storage. For example, write ``15 
-Gb/cm$^{2}$ (100 Gb/in$^{2})$.'' An exception is when 
-English units are used as identifiers in trade, such as ``3\textonehalf-in 
-disk drive.'' Avoid combining SI and CGS units, such as current in amperes 
-and magnetic field in oersteds. This often leads to confusion because 
-equations do not balance dimensionally. If you must use mixed units, clearly 
-state the units for each quantity in an equation.
-
-The SI unit for magnetic field strength $H$ is A/m. However, if you wish to use 
-units of T, either refer to magnetic flux density $B$ or magnetic field 
-strength symbolized as $\mu _{0}H$. Use the center dot to separate 
-compound units, e.g., ``A$\cdot $m$^{2}$.''
-
-\section{Some Common Mistakes}
-The word ``data'' is plural, not singular. The subscript for the 
-permeability of vacuum $\mu _{0}$ is zero, not a lowercase letter 
-``o.'' The term for residual magnetization is ``remanence''; the adjective 
-is ``remanent''; do not write ``remnance'' or ``remnant.'' Use the word 
-``micrometer'' instead of ``micron.'' A graph within a graph is an 
-``inset,'' not an ``insert.'' The word ``alternatively'' is preferred to the 
-word ``alternately'' (unless you really mean something that alternates). Use 
-the word ``whereas'' instead of ``while'' (unless you are referring to 
-simultaneous events). Do not use the word ``essentially'' to mean 
-``approximately'' or ``effectively.'' Do not use the word ``issue'' as a 
-euphemism for ``problem.'' When compositions are not specified, separate 
-chemical symbols by en-dashes; for example, ``NiMn'' indicates the 
-intermetallic compound Ni$_{0.5}$Mn$_{0.5}$ whereas 
-``Ni--Mn'' indicates an alloy of some composition 
-Ni$_{x}$Mn$_{1-x}$.
-
-\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){fig1.png}
-{Magnetization as a function of applied field.
-It is good practice to explain the significance of the figure in the caption.\label{fig1}}
-
-Be aware of the different meanings of the homophones ``affect'' (usually a 
-verb) and ``effect'' (usually a noun), ``complement'' and ``compliment,'' 
-``discreet'' and ``discrete,'' ``principal'' (e.g., ``principal 
-investigator'') and ``principle'' (e.g., ``principle of measurement''). Do 
-not confuse ``imply'' and ``infer.'' 
-
-Prefixes such as ``non,'' ``sub,'' ``micro,'' ``multi,'' and ``ultra'' are 
-not independent words; they should be joined to the words they modify, 
-usually without a hyphen. There is no period after the ``et'' in the Latin 
-abbreviation ``\emph{et al.}'' (it is also italicized). The abbreviation ``i.e.,'' means 
-``that is,'' and the abbreviation ``e.g.,'' means ``for example'' (these 
-abbreviations are not italicized).
-
-A general IEEE styleguide is available at \underline{http://www.ieee.org/}\break\underline{authortools}.
-
-\section{Guidelines for Graphics Preparation and Submission}
-\label{sec:guidelines}
-
-\subsection{Types of Graphics}
-The following list outlines the different types of graphics published in 
-IEEE journals. They are categorized based on their construction, and use of 
-color/shades of gray:
-
-\subsubsection{Color/Grayscale figures}
-{Figures that are meant to appear in color, or shades of black/gray. Such 
-figures may include photographs, illustrations, multicolor graphs, and 
-flowcharts.}
-
-\subsubsection{Line Art figures}
-{Figures that are composed of only black lines and shapes. These figures 
-should have no shades or half-tones of gray, only black and white.}
-
-\subsubsection{Author photos}
-{Head and shoulders shots of authors that appear at the end of our papers. }
-
-\subsubsection{Tables}
-{Data charts which are typically black and white, but sometimes include 
-color.}
-
-\begin{table}
-\caption{Units for Magnetic Properties}
-\label{table}
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{|p{25pt}|p{75pt}|p{115pt}|}
-\hline
-Symbol& 
-Quantity& 
-Conversion from Gaussian and \par CGS EMU to SI $^{\mathrm{a}}$ \\
-\hline
-$\Phi $& 
-magnetic flux& 
-1 Mx $\to  10^{-8}$ Wb $= 10^{-8}$ V$\cdot $s \\
-$B$& 
-magnetic flux density, \par magnetic induction& 
-1 G $\to  10^{-4}$ T $= 10^{-4}$ Wb/m$^{2}$ \\
-$H$& 
-magnetic field strength& 
-1 Oe $\to  10^{3}/(4\pi )$ A/m \\
-$m$& 
-magnetic moment& 
-1 erg/G $=$ 1 emu \par $\to 10^{-3}$ A$\cdot $m$^{2} = 10^{-3}$ J/T \\
-$M$& 
-magnetization& 
-1 erg/(G$\cdot $cm$^{3}) =$ 1 emu/cm$^{3}$ \par $\to 10^{3}$ A/m \\
-4$\pi M$& 
-magnetization& 
-1 G $\to  10^{3}/(4\pi )$ A/m \\
-$\sigma $& 
-specific magnetization& 
-1 erg/(G$\cdot $g) $=$ 1 emu/g $\to $ 1 A$\cdot $m$^{2}$/kg \\
-$j$& 
-magnetic dipole \par moment& 
-1 erg/G $=$ 1 emu \par $\to 4\pi \times  10^{-10}$ Wb$\cdot $m \\
-$J$& 
-magnetic polarization& 
-1 erg/(G$\cdot $cm$^{3}) =$ 1 emu/cm$^{3}$ \par $\to 4\pi \times  10^{-4}$ T \\
-$\chi , \kappa $& 
-susceptibility& 
-1 $\to  4\pi $ \\
-$\chi_{\rho }$& 
-mass susceptibility& 
-1 cm$^{3}$/g $\to  4\pi \times  10^{-3}$ m$^{3}$/kg \\
-$\mu $& 
-permeability& 
-1 $\to  4\pi \times  10^{-7}$ H/m \par $= 4\pi \times  10^{-7}$ Wb/(A$\cdot $m) \\
-$\mu_{r}$& 
-relative permeability& 
-$\mu \to \mu_{r}$ \\
-$w, W$& 
-energy density& 
-1 erg/cm$^{3} \to  10^{-1}$ J/m$^{3}$ \\
-$N, D$& 
-demagnetizing factor& 
-1 $\to  1/(4\pi )$ \\
-\hline
-\multicolumn{3}{p{251pt}}{Vertical lines are optional in tables. Statements that serve as captions for 
-the entire table do not need footnote letters. }\\
-\multicolumn{3}{p{251pt}}{$^{\mathrm{a}}$Gaussian units are the same as cg emu for magnetostatics; Mx 
-$=$ maxwell, G $=$ gauss, Oe $=$ oersted; Wb $=$ weber, V $=$ volt, s $=$ 
-second, T $=$ tesla, m $=$ meter, A $=$ ampere, J $=$ joule, kg $=$ 
-kilogram, H $=$ henry.}
-\end{tabular}
-\label{tab1}
-\end{table}
-
-\subsection{Multipart figures}
-Figures compiled of more than one sub-figure presented side-by-side, or 
-stacked. If a multipart figure is made up of multiple figure
-types (one part is lineart, and another is grayscale or color) the figure 
-should meet the stricter guidelines.
-
-\subsection{File Formats For Graphics}\label{formats}
-Format and save your graphics using a suitable graphics processing program 
-that will allow you to create the images as PostScript (PS), Encapsulated 
-PostScript (.EPS), Tagged Image File Format (.TIFF), Portable Document 
-Format (.PDF), Portable Network Graphics (.PNG), or Metapost (.MPS), sizes them, and adjusts 
-the resolution settings. When 
-submitting your final paper, your graphics should all be submitted 
-individually in one of these formats along with the manuscript.
-
-\subsection{Sizing of Graphics}
-Most charts, graphs, and tables are one column wide (3.5 inches/88 
-millimeters/21 picas) or page wide (7.16 inches/181 millimeters/43 
-picas). The maximum depth a graphic can be is 8.5 inches (216 millimeters/54
-picas). When choosing the depth of a graphic, please allow space for a 
-caption. Figures can be sized between column and page widths if the author 
-chooses, however it is recommended that figures are not sized less than 
-column width unless when necessary. 
-
-There is currently one publication with column measurements that do not 
-coincide with those listed above. Proceedings of the IEEE has a column 
-measurement of 3.25 inches (82.5 millimeters/19.5 picas). 
-
-The final printed size of author photographs is exactly
-1 inch wide by 1.25 inches tall (25.4 millimeters$\,\times\,$31.75 millimeters/6 
-picas$\,\times\,$7.5 picas). Author photos printed in editorials measure 1.59 inches 
-wide by 2 inches tall (40 millimeters$\,\times\,$50 millimeters/9.5 picas$\,\times\,$12 
-picas).
-
-\subsection{Resolution }
-The proper resolution of your figures will depend on the type of figure it 
-is as defined in the ``Types of Figures'' section. Author photographs, 
-color, and grayscale figures should be at least 300dpi. Line art, including 
-tables should be a minimum of 600dpi.
-
-\subsection{Vector Art}
-In order to preserve the figures' integrity across multiple computer 
-platforms, we accept files in the following formats: .EPS/.PDF/.PS. All 
-fonts must be embedded or text converted to outlines in order to achieve the 
-best-quality results.
-
-\subsection{Color Space}
-The term color space refers to the entire sum of colors that can be 
-represented within the said medium. For our purposes, the three main color 
-spaces are Grayscale, RGB (red/green/blue) and CMYK 
-(cyan/magenta/yellow/black). RGB is generally used with on-screen graphics, 
-whereas CMYK is used for printing purposes.
-
-All color figures should be generated in RGB or CMYK color space. Grayscale 
-images should be submitted in Grayscale color space. Line art may be 
-provided in grayscale OR bitmap colorspace. Note that ``bitmap colorspace'' 
-and ``bitmap file format'' are not the same thing. When bitmap color space 
-is selected, .TIF/.TIFF/.PNG are the recommended file formats.
-
-\subsection{Accepted Fonts Within Figures}
-When preparing your graphics IEEE suggests that you use of one of the 
-following Open Type fonts: Times New Roman, Helvetica, Arial, Cambria, and 
-Symbol. If you are supplying EPS, PS, or PDF files all fonts must be 
-embedded. Some fonts may only be native to your operating system; without 
-the fonts embedded, parts of the graphic may be distorted or missing.
-
-A safe option when finalizing your figures is to strip out the fonts before 
-you save the files, creating ``outline'' type. This converts fonts to 
-artwork what will appear uniformly on any screen.
-
-\subsection{Using Labels Within Figures}
-
-\subsubsection{Figure Axis labels }
-Figure axis labels are often a source of confusion. Use words rather than 
-symbols. As an example, write the quantity ``Magnetization,'' or 
-``Magnetization M,'' not just ``M.'' Put units in parentheses. Do not label 
-axes only with units. As in Fig. 1, for example, write ``Magnetization 
-(A/m)'' or ``Magnetization (A$\cdot$m$^{-1}$),'' not just ``A/m.'' Do not label axes with a ratio of quantities and 
-units. For example, write ``Temperature (K),'' not ``Temperature/K.'' 
-
-Multipliers can be especially confusing. Write ``Magnetization (kA/m)'' or 
-``Magnetization (10$^{3}$ A/m).'' Do not write ``Magnetization 
-(A/m)$\,\times\,$1000'' because the reader would not know whether the top 
-axis label in Fig. 1 meant 16000 A/m or 0.016 A/m. Figure labels should be 
-legible, approximately 8 to 10 point type.
-
-\subsubsection{Subfigure Labels in Multipart Figures and Tables}
-Multipart figures should be combined and labeled before final submission. 
-Labels should appear centered below each subfigure in 8 point Times New 
-Roman font in the format of (a) (b) (c). 
-
-\subsection{File Naming}
-Figures (line artwork or photographs) should be named starting with the 
-first 5 letters of the author's last name. The next characters in the 
-filename should be the number that represents the sequential 
-location of this image in your article. For example, in author 
-``Anderson's'' paper, the first three figures would be named ander1.tif, 
-ander2.tif, and ander3.ps.
-
-Tables should contain only the body of the table (not the caption) and 
-should be named similarly to figures, except that `.t' is inserted 
-in-between the author's name and the table number. For example, author 
-Anderson's first three tables would be named ander.t1.tif, ander.t2.ps, 
-ander.t3.eps.
-
-Author photographs should be named using the first five characters of the 
-pictured author's last name. For example, four author photographs for a 
-paper may be named: oppen.ps, moshc.tif, chen.eps, and duran.pdf.
-
-If two authors or more have the same last name, their first initial(s) can 
-be substituted for the fifth, fourth, third$\ldots$ letters of their surname 
-until the degree where there is differentiation. For example, two authors 
-Michael and Monica Oppenheimer's photos would be named oppmi.tif, and 
-oppmo.eps.
-
-\subsection{Referencing a Figure or Table Within Your Paper}
-When referencing your figures and tables within your paper, use the 
-abbreviation ``Fig.'' even at the beginning of a sentence. Do not abbreviate 
-``Table.'' Tables should be numbered with Roman Numerals.
-
-\subsection{Checking Your Figures: The IEEE Graphics Analyzer}
-The IEEE Graphics Analyzer enables authors to pre-screen their graphics for 
-compliance with IEEE Access standards before submission. 
-The online tool, located at
-\underline{http://graphicsqc.ieee.org/}, allows authors to 
-upload their graphics in order to check that each file is the correct file 
-format, resolution, size and colorspace; that no fonts are missing or 
-corrupt; that figures are not compiled in layers or have transparency, and 
-that they are named according to the IEEE Access naming 
-convention. At the end of this automated process, authors are provided with 
-a detailed report on each graphic within the web applet, as well as by 
-email.
-
-For more information on using the Graphics Analyzer or any other graphics 
-related topic, contact the IEEE Graphics Help Desk by e-mail at 
-graphics@ieee.org.
-
-\subsection{Submitting Your Graphics}
-Because IEEE will do the final formatting of your paper,
-you do not need to position figures and tables at the top and bottom of each 
-column. In fact, all figures, figure captions, and tables can be placed at 
-the end of your paper. In addition to, or even in lieu of submitting figures 
-within your final manuscript, figures should be submitted individually, 
-separate from the manuscript in one of the file formats listed above in 
-Section \ref{formats}. Place figure captions below the figures; place table titles 
-above the tables. Please do not include captions as part of the figures, or 
-put them in ``text boxes'' linked to the figures. Also, do not place borders 
-around the outside of your figures.
-
-\subsection{Color Processing/Printing in IEEE Journals}
-All IEEE Transactions, Journals, and Letters allow an author to publish 
-color figures on IEEE Xplore\textregistered\ at no charge, and automatically 
-convert them to grayscale for print versions. In most journals, figures and 
-tables may alternatively be printed in color if an author chooses to do so. 
-Please note that this service comes at an extra expense to the author. If 
-you intend to have print color graphics, include a note with your final 
-paper indicating which figures or tables you would like to be handled that 
-way, and stating that you are willing to pay the additional fee.
-
-\section{Conclusion}
-A conclusion section is not required. Although a conclusion may review the 
-main points of the paper, do not replicate the abstract as the conclusion. A 
-conclusion might elaborate on the importance of the work or suggest 
-applications and extensions. 
-
-\appendices
-
-Appendixes, if needed, appear before the acknowledgment.
-
-\section*{Acknowledgment}
-
-The preferred spelling of the word ``acknowledgment'' in American English is 
-without an ``e'' after the ``g.'' Use the singular heading even if you have 
-many acknowledgments. Avoid expressions such as ``One of us (S.B.A.) would 
-like to thank $\ldots$ .'' Instead, write ``F. A. Author thanks $\ldots$ .'' In most 
-cases, sponsor and financial support acknowledgments are placed in the 
-unnumbered footnote on the first page, not here.
-
-\section*{References and Footnotes}
-
-\subsection{References}
-References need not be cited in text. When they are, they appear on the 
-line, in square brackets, inside the punctuation. Multiple references are 
-each numbered with separate brackets. When citing a section in a book, 
-please give the relevant page numbers. In text, refer simply to the 
-reference number. Do not use ``Ref.'' or ``reference'' except at the 
-beginning of a sentence: ``Reference \cite{b3} shows $\ldots$ .'' Please do not use 
-automatic endnotes in \emph{Word}, rather, type the reference list at the end of the 
-paper using the ``References'' style.
-
-Reference numbers are set flush left and form a column of their own, hanging 
-out beyond the body of the reference. The reference numbers are on the line, 
-enclosed in square brackets. In all references, the given name of the author 
-or editor is abbreviated to the initial only and precedes the last name. Use 
-them all; use \emph{et al.} only if names are not given. Use commas around Jr., 
-Sr., and III in names. Abbreviate conference titles. When citing IEEE 
-transactions, provide the issue number, page range, volume number, year, 
-and/or month if available. When referencing a patent, provide the day and 
-the month of issue, or application. References may not include all 
-information; please obtain and include relevant information. Do not combine 
-references. There must be only one reference with each number. If there is a 
-URL included with the print reference, it can be included at the end of the 
-reference. 
-
-Other than books, capitalize only the first word in a paper title, except 
-for proper nouns and element symbols. For papers published in translation 
-journals, please give the English citation first, followed by the original 
-foreign-language citation See the end of this document for formats and 
-examples of common references. For a complete discussion of references and 
-their formats, see the IEEE style manual at
-\underline{http://www.ieee.org/authortools}.
-
-\subsection{Footnotes}
-Number footnotes separately in superscript numbers.\footnote{It is recommended that footnotes be avoided (except for 
-the unnumbered footnote with the receipt date on the first page). Instead, 
-try to integrate the footnote information into the text.} Place the actual 
-footnote at the bottom of the column in which it is cited; do not put 
-footnotes in the reference list (endnotes). Use letters for table footnotes 
-(see Table \ref{table}).
-
-\section{Submitting Your Paper for Review}
-
-\subsection{Final Stage}
-When you submit your final version (after your paper has been accepted), 
-print it in two-column format, including figures and tables. You must also 
-send your final manuscript on a disk, via e-mail, or through a Web 
-manuscript submission system as directed by the society contact. You may use 
-\emph{Zip} for large files, or compress files using \emph{Compress, Pkzip, Stuffit,} or \emph{Gzip.} 
-
-Also, send a sheet of paper or PDF with complete contact information for all 
-authors. Include full mailing addresses, telephone numbers, fax numbers, and 
-e-mail addresses. This information will be used to send each author a 
-complimentary copy of the journal in which the paper appears. In addition, 
-designate one author as the ``corresponding author.'' This is the author to 
-whom proofs of the paper will be sent. Proofs are sent to the corresponding 
-author only.
-
-\subsection{Review Stage Using ScholarOne\textregistered\ Manuscripts}
-Contributions to the Transactions, Journals, and Letters may be submitted 
-electronically on IEEE's on-line manuscript submission and peer-review 
-system, ScholarOne\textregistered\ Manuscripts. You can get a listing of the 
-publications that participate in ScholarOne at 
-\underline{http://www.ieee.org/publications\_standards/publications/}\break\underline{authors/authors\_submission.html}.
-First check if you have an existing account. If there is none, please create 
-a new account. After logging in, go to your Author Center and click ``Submit 
-First Draft of a New Manuscript.'' 
-
-Along with other information, you will be asked to select the subject from a 
-pull-down list. Depending on the journal, there are various steps to the 
-submission process; you must complete all steps for a complete submission. 
-At the end of each step you must click ``Save and Continue''; just uploading 
-the paper is not sufficient. After the last step, you should see a 
-confirmation that the submission is complete. You should also receive an 
-e-mail confirmation. For inquiries regarding the submission of your paper on 
-ScholarOne Manuscripts, please contact oprs-support@ieee.org or call +1 732 
-465 5861.
-
-ScholarOne Manuscripts will accept files for review in various formats. 
-Please check the guidelines of the specific journal for which you plan to 
-submit.
-
-You will be asked to file an electronic copyright form immediately upon 
-completing the submission process (authors are responsible for obtaining any 
-security clearances). Failure to submit the electronic copyright could 
-result in publishing delays later. You will also have the opportunity to 
-designate your article as ``open access'' if you agree to pay the IEEE open 
-access fee. 
-
-\subsection{Final Stage Using ScholarOne Manuscripts}
-Upon acceptance, you will receive an email with specific instructions 
-regarding the submission of your final files. To avoid any delays in 
-publication, please be sure to follow these instructions. Most journals 
-require that final submissions be uploaded through ScholarOne Manuscripts, 
-although some may still accept final submissions via email. Final 
-submissions should include source files of your accepted manuscript, high 
-quality graphic files, and a formatted pdf file. If you have any questions 
-regarding the final submission process, please contact the administrative 
-contact for the journal. 
-
-In addition to this, upload a file with complete contact information for all 
-authors. Include full mailing addresses, telephone numbers, fax numbers, and 
-e-mail addresses. Designate the author who submitted the manuscript on 
-ScholarOne Manuscripts as the ``corresponding author.'' This is the only 
-author to whom proofs of the paper will be sent. 
-
-\subsection{Copyright Form}
-Authors must submit an electronic IEEE Copyright Form (eCF) upon submitting 
-their final manuscript files. You can access the eCF system through your 
-manuscript submission system or through the Author Gateway. You are 
-responsible for obtaining any necessary approvals and/or security 
-clearances. For additional information on intellectual property rights, 
-visit the IEEE Intellectual Property Rights department web page at 
-\underline{http://www.ieee.org/publications\_standards/publications/}\break\underline{rights/index.html}. 
-
-\section{IEEE Publishing Policy}
-The general IEEE policy requires that authors should only submit original 
-work that has neither appeared elsewhere for publication, nor is under 
-review for another refereed publication. The submitting author must disclose 
-all prior publication(s) and current submissions when submitting a 
-manuscript. Do not publish ``preliminary'' data or results. The submitting 
-author is responsible for obtaining agreement of all coauthors and any 
-consent required from employers or sponsors before submitting an article. 
-The IEEE Access Department strongly discourages courtesy 
-authorship; it is the obligation of the authors to cite only relevant prior 
-work.
-
-The IEEE Access Department does not publish conference 
-records or proceedings, but can publish articles related to conferences that 
-have undergone rigorous peer review. Minimally, two reviews are required for 
-every article submitted for peer review.
-
-\section{Publication Principles}
-The two types of contents of that are published are; 1) peer-reviewed and 2) 
-archival. The Access Department publishes scholarly 
-articles of archival value as well as tutorial expositions and critical 
-reviews of classical subjects and topics of current interest. 
-
-Authors should consider the following points:
-
-\begin{enumerate}
-\item Technical papers submitted for publication must advance the state of knowledge and must cite relevant prior work. 
-\item The length of a submitted paper should be commensurate with the importance, or appropriate to the complexity, of the work. For example, an obvious extension of previously published work might not be appropriate for publication or might be adequately treated in just a few pages.
-\item Authors must convince both peer reviewers and the editors of the scientific and technical merit of a paper; the standards of proof are higher when extraordinary or unexpected results are reported. 
-\item Because replication is required for scientific progress, papers submitted for publication must provide sufficient information to allow readers to perform similar experiments or calculations and 
-use the reported results. Although not everything need be disclosed, a paper 
-must contain new, useable, and fully described information. For example, a 
-specimen's chemical composition need not be reported if the main purpose of 
-a paper is to introduce a new measurement technique. Authors should expect 
-to be challenged by reviewers if the results are not supported by adequate 
-data and critical details.
-\item Papers that describe ongoing work or announce the latest technical achievement, which are suitable for presentation at a professional conference, may not be appropriate for publication.
-\end{enumerate}
-
-\section{Reference Examples}
-
-\begin{itemize}
-
-\item \emph{Basic format for books:}\\
-J. K. Author, ``Title of chapter in the book,'' in \emph{Title of His Published Book, x}th ed. City of Publisher, (only U.S. State), Country: Abbrev. of Publisher, year, ch. $x$, sec. $x$, pp. \emph{xxx--xxx.}\\
-See \cite{b1,b2}.
-
-\item \emph{Basic format for periodicals:}\\
-J. K. Author, ``Name of paper,'' \emph{Abbrev. Title of Periodical}, vol. \emph{x, no}. $x, $pp\emph{. xxx--xxx, }Abbrev. Month, year, DOI. 10.1109.\emph{XXX}.123456.\\
-See \cite{b3}--\cite{b5}.
-
-\item \emph{Basic format for reports:}\\
-J. K. Author, ``Title of report,'' Abbrev. Name of Co., City of Co., Abbrev. State, Country, Rep. \emph{xxx}, year.\\
-See \cite{b6,b7}.
-
-\item \emph{Basic format for handbooks:}\\
-\emph{Name of Manual/Handbook, x} ed., Abbrev. Name of Co., City of Co., Abbrev. State, Country, year, pp. \emph{xxx--xxx.}\\
-See \cite{b8,b9}.
-
-\item \emph{Basic format for books (when available online):}\\
-J. K. Author, ``Title of chapter in the book,'' in \emph{Title of
-Published Book}, $x$th ed. City of Publisher, State, Country: Abbrev.
-of Publisher, year, ch. $x$, sec. $x$, pp. \emph{xxx--xxx}. [Online].
-Available: \underline{http://www.web.com}\\
-See \cite{b10}--\cite{b13}.
-
-\item \emph{Basic format for journals (when available online):}\\
-J. K. Author, ``Name of paper,'' \emph{Abbrev. Title of Periodical}, vol. $x$, no. $x$, pp. \emph{xxx--xxx}, Abbrev. Month, year. Accessed on: Month, Day, year, DOI: 10.1109.\emph{XXX}.123456, [Online].\\
-See \cite{b14}--\cite{b16}.
-
-\item \emph{Basic format for papers presented at conferences (when available online): }\\
-J.K. Author. (year, month). Title. presented at abbrev. conference title. [Type of Medium]. Available: site/path/file\\
-See \cite{b17}.
-
-\item \emph{Basic format for reports and handbooks (when available online):}\\
-J. K. Author. ``Title of report,'' Company. City, State, Country. Rep. no., (optional: vol./issue), Date. [Online] Available: site/path/file\\
-See \cite{b18,b19}.
-
-\item \emph{Basic format for computer programs and electronic documents (when available online): }\\
-Legislative body. Number of Congress, Session. (year, month day). \emph{Number of bill or resolution}, \emph{Title}. [Type of medium]. Available: site/path/file\\
-\textbf{\emph{NOTE: }ISO recommends that capitalization follow the accepted practice for the language or script in which the information is given.}\\
-See \cite{b20}.
-
-\item \emph{Basic format for patents (when available online):}\\
-Name of the invention, by inventor's name. (year, month day). Patent Number [Type of medium]. Available: site/path/file\\
-See \cite{b21}.
-
-\item \emph{Basic format}\emph{for conference proceedings (published):}\\
-J. K. Author, ``Title of paper,'' in \emph{Abbreviated Name of Conf.}, City of Conf., Abbrev. State (if given), Country, year, pp. \emph{xxxxxx.}\\
-See \cite{b22}.
-
-\item \emph{Example for papers presented at conferences (unpublished):}\\
-See \cite{b23}.
-
-\item \emph{Basic format for patents}$:$\\
-J. K. Author, ``Title of patent,'' U.S. Patent \emph{x xxx xxx}, Abbrev. Month, day, year.\\
-See \cite{b24}.
-
-\item \emph{Basic format for theses (M.S.) and dissertations (Ph.D.):}
-\begin{enumerate}
-\item J. K. Author, ``Title of thesis,'' M.S. thesis, Abbrev. Dept., Abbrev. Univ., City of Univ., Abbrev. State, year.
-\item J. K. Author, ``Title of dissertation,'' Ph.D. dissertation, Abbrev. Dept., Abbrev. Univ., City of Univ., Abbrev. State, year.
-\end{enumerate}
-See \cite{b25,b26}.
-
-\item \emph{Basic format for the most common types of unpublished references:}
-\begin{enumerate}
-\item J. K. Author, private communication, Abbrev. Month, year.
-\item J. K. Author, ``Title of paper,'' unpublished.
-\item J. K. Author, ``Title of paper,'' to be published.
-\end{enumerate}
-See \cite{b27}--\cite{b29}.
-
-\item \emph{Basic formats for standards:}
-\begin{enumerate}
-\item \emph{Title of Standard}, Standard number, date.
-\item \emph{Title of Standard}, Standard number, Corporate author, location, date.
-\end{enumerate}
-See \cite{b30,b31}.
-
-\item \emph{Article number in~reference examples:}\\
-See \cite{b32,b33}.
-
-\item \emph{Example when using et al.:}\\
-See \cite{b34}.
-
-\end{itemize}
-
-\begin{thebibliography}{00}
-
-\bibitem{b1} G. O. Young, ``Synthetic structure of industrial plastics,'' in \emph{Plastics,} 2\textsuperscript{nd} ed., vol. 3, J. Peters, Ed. New York, NY, USA: McGraw-Hill, 1964, pp. 15--64.
-
-\bibitem{b2} W.-K. Chen, \emph{Linear Networks and Systems.} Belmont, CA, USA: Wadsworth, 1993, pp. 123--135.
-
-\bibitem{b3} J. U. Duncombe, ``Infrared navigation---Part I: An assessment of feasibility,'' \emph{IEEE Trans. Electron Devices}, vol. ED-11, no. 1, pp. 34--39, Jan. 1959, 10.1109/TED.2016.2628402.
-
-\bibitem{b4} E. P. Wigner, ``Theory of traveling-wave optical laser,'' \emph{Phys. Rev}., vol. 134, pp. A635--A646, Dec. 1965.
-
-\bibitem{b5} E. H. Miller, ``A note on reflector arrays,'' \emph{IEEE Trans. Antennas Propagat}., to be published.
-
-\bibitem{b6} E. E. Reber, R. L. Michell, and C. J. Carter, ``Oxygen absorption in the earth's atmosphere,'' Aerospace Corp., Los Angeles, CA, USA, Tech. Rep. TR-0200 (4230-46)-3, Nov. 1988.
-
-\bibitem{b7} J. H. Davis and J. R. Cogdell, ``Calibration program for the 16-foot antenna,'' Elect. Eng. Res. Lab., Univ. Texas, Austin, TX, USA, Tech. Memo. NGL-006-69-3, Nov. 15, 1987.
-
-\bibitem{b8} \emph{Transmission Systems for Communications}, 3\textsuperscript{rd} ed., Western Electric Co., Winston-Salem, NC, USA, 1985, pp. 44--60.
-
-\bibitem{b9} \emph{Motorola Semiconductor Data Manual}, Motorola Semiconductor Products Inc., Phoenix, AZ, USA, 1989.
-
-\bibitem{b10} G. O. Young, ``Synthetic structure of industrial
-plastics,'' in Plastics, vol. 3, Polymers of Hexadromicon, J. Peters,
-Ed., 2\textsuperscript{nd} ed. New York, NY, USA: McGraw-Hill, 1964, pp. 15-64.
-[Online]. Available:
-\underline{http://www.bookref.com}.
-
-\bibitem{b11} \emph{The Founders' Constitution}, Philip B. Kurland
-and Ralph Lerner, eds., Chicago, IL, USA: Univ. Chicago Press, 1987.
-[Online]. Available: \underline{http://press-pubs.uchicago.edu/founders/}
-
-\bibitem{b12} The Terahertz Wave eBook. ZOmega Terahertz Corp., 2014.
-[Online]. Available:
-\underline{http://dl.z-thz.com/eBook/zomega\_ebook\_pdf\_1206\_sr.pdf}. Accessed on: May 19, 2014.
-
-\bibitem{b13} Philip B. Kurland and Ralph Lerner, eds., \emph{The
-Founders' Constitution.} Chicago, IL, USA: Univ. of Chicago Press,
-1987, Accessed on: Feb. 28, 2010, [Online] Available:
-\underline{http://press-pubs.uchicago.edu/founders/}
-
-\bibitem{b14} J. S. Turner, ``New directions in communications,'' \emph{IEEE J. Sel. Areas Commun}., vol. 13, no. 1, pp. 11-23, Jan. 1995.
-
-\bibitem{b15} W. P. Risk, G. S. Kino, and H. J. Shaw, ``Fiber-optic frequency shifter using a surface acoustic wave incident at an oblique angle,'' \emph{Opt. Lett.}, vol. 11, no. 2, pp. 115--117, Feb. 1986.
-
-\bibitem{b16} P. Kopyt \emph{et al., ``}Electric properties of graphene-based conductive layers from DC up to terahertz range,'' \emph{IEEE THz Sci. Technol.,} to be published. DOI: 10.1109/TTHZ.2016.2544142.
-
-\bibitem{b17} PROCESS Corporation, Boston, MA, USA. Intranets:
-Internet technologies deployed behind the firewall for corporate
-productivity. Presented at INET96 Annual Meeting. [Online].
-Available: \underline{http://home.process.com/Intranets/wp2.htp}
-
-\bibitem{b18} R. J. Hijmans and J. van Etten, ``Raster: Geographic analysis and modeling with raster data,'' R Package Version 2.0-12, Jan. 12, 2012. [Online]. Available: \underline {http://CRAN.R-project.org/package=raster} 
-
-\bibitem{b19} Teralyzer. Lytera UG, Kirchhain, Germany [Online].
-Available:
-\underline{http://www.lytera.de/Terahertz\_THz\_Spectroscopy.php?id=home}, Accessed on: Jun. 5, 2014
-
-\bibitem{b20} U.S. House. 102\textsuperscript{nd} Congress, 1\textsuperscript{st} Session. (1991, Jan. 11). \emph{H. Con. Res. 1, Sense of the Congress on Approval of}  \emph{Military Action}. [Online]. Available: LEXIS Library: GENFED File: BILLS
-
-\bibitem{b21} Musical toothbrush with mirror, by L.M.R. Brooks. (1992, May 19). Patent D 326 189 [Online]. Available: NEXIS Library: LEXPAT File: DES
-
-\bibitem{b22} D. B. Payne and J. R. Stern, ``Wavelength-switched pas- sively coupled single-mode optical network,'' in \emph{Proc. IOOC-ECOC,} Boston, MA, USA, 1985, pp. 585--590.
-
-\bibitem{b23} D. Ebehard and E. Voges, ``Digital single sideband detection for interferometric sensors,'' presented at the \emph{2\textsuperscript{nd} Int. Conf. Optical Fiber Sensors,} Stuttgart, Germany, Jan. 2-5, 1984.
-
-\bibitem{b24} G. Brandli and M. Dick, ``Alternating current fed power supply,'' U.S. Patent 4 084 217, Nov. 4, 1978.
-
-\bibitem{b25} J. O. Williams, ``Narrow-band analyzer,'' Ph.D. dissertation, Dept. Elect. Eng., Harvard Univ., Cambridge, MA, USA, 1993.
-
-\bibitem{b26} N. Kawasaki, ``Parametric study of thermal and chemical nonequilibrium nozzle flow,'' M.S. thesis, Dept. Electron. Eng., Osaka Univ., Osaka, Japan, 1993.
-
-\bibitem{b27} A. Harrison, private communication, May 1995.
-
-\bibitem{b28} B. Smith, ``An approach to graphs of linear forms,'' unpublished.
-
-\bibitem{b29} A. Brahms, ``Representation error for real numbers in binary computer arithmetic,'' IEEE Computer Group Repository, Paper R-67-85.
-
-\bibitem{b30} IEEE Criteria for Class IE Electric Systems, IEEE Standard 308, 1969.
-
-\bibitem{b31} Letter Symbols for Quantities, ANSI Standard Y10.5-1968.
-
-\bibitem{b32} R. Fardel, M. Nagel, F. Nuesch, T. Lippert, and A. Wokaun, ``Fabrication of organic light emitting diode pixels by laser-assisted forward transfer,'' \emph{Appl. Phys. Lett.}, vol. 91, no. 6, Aug. 2007, Art. no. 061103.~
-
-\bibitem{b33} J. Zhang and N. Tansu, ``Optical gain and laser characteristics of InGaN quantum wells on ternary InGaN substrates,'' \emph{IEEE Photon. J.}, vol. 5, no. 2, Apr. 2013, Art. no. 2600111
-
-\bibitem{b34} S. Azodolmolky~\emph{et al.}, Experimental demonstration of an impairment aware network planning and operation tool for transparent/translucent optical networks,''~\emph{J. Lightw. Technol.}, vol. 29, no. 4, pp. 439--448, Sep. 2011.
-
-\end{thebibliography}
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{a1.png}}]{First A. Author} (M'76--SM'81--F'87) and all authors may include 
-biographies. Biographies are often not included in conference-related
-papers. This author became a Member (M) of IEEE in 1976, a Senior
-Member (SM) in 1981, and a Fellow (F) in 1987. The first paragraph may
-contain a place and/or date of birth (list place, then date). Next,
-the author's educational background is listed. The degrees should be
-listed with type of degree in what field, which institution, city,
-state, and country, and year the degree was earned. The author's major
-field of study should be lower-cased. 
-
-The second paragraph uses the pronoun of the person (he or she) and not the 
-author's last name. It lists military and work experience, including summer 
-and fellowship jobs. Job titles are capitalized. The current job must have a 
-location; previous positions may be listed 
-without one. Information concerning previous publications may be included. 
-Try not to list more than three books or published articles. The format for 
-listing publishers of a book within the biography is: title of book 
-(publisher name, year) similar to a reference. Current and previous research 
-interests end the paragraph. The third paragraph begins with the author's 
-title and last name (e.g., Dr.\ Smith, Prof.\ Jones, Mr.\ Kajor, Ms.\ Hunter). 
-List any memberships in professional societies other than the IEEE. Finally, 
-list any awards and work for IEEE committees and publications. If a 
-photograph is provided, it should be of good quality, and 
-professional-looking. Following are two examples of an author's biography.
-\end{IEEEbiography}
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{a2.png}}]{Second B. Author} was born in Greenwich Village, New York, NY, USA in 
-1977. He received the B.S. and M.S. degrees in aerospace engineering from 
-the University of Virginia, Charlottesville, in 2001 and the Ph.D. degree in 
-mechanical engineering from Drexel University, Philadelphia, PA, in 2008.
-
-From 2001 to 2004, he was a Research Assistant with the Princeton Plasma 
-Physics Laboratory. Since 2009, he has been an Assistant Professor with the 
-Mechanical Engineering Department, Texas A{\&}M University, College Station. 
-He is the author of three books, more than 150 articles, and more than 70 
-inventions. His research interests include high-pressure and high-density 
-nonthermal plasma discharge processes and applications, microscale plasma 
-discharges, discharges in liquids, spectroscopic diagnostics, plasma 
-propulsion, and innovation plasma applications. He is an Associate Editor of 
-the journal \emph{Earth, Moon, Planets}, and holds two patents. 
-
-Dr. Author was a recipient of the International Association of Geomagnetism 
-and Aeronomy Young Scientist Award for Excellence in 2008, and the IEEE 
-Electromagnetic Compatibility Society Best Symposium Paper Award in 2011. 
-\end{IEEEbiography}
-
-\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{a3.png}}]{Third C. Author, Jr.} (M'87) received the B.S. degree in mechanical 
-engineering from National Chung Cheng University, Chiayi, Taiwan, in 2004 
-and the M.S. degree in mechanical engineering from National Tsing Hua 
-University, Hsinchu, Taiwan, in 2006. He is currently pursuing the Ph.D. 
-degree in mechanical engineering at Texas A{\&}M University, College 
-Station, TX, USA.
-
-From 2008 to 2009, he was a Research Assistant with the Institute of 
-Physics, Academia Sinica, Tapei, Taiwan. His research interest includes the 
-development of surface processing and biological/medical treatment 
-techniques using nonthermal atmospheric pressure plasmas, fundamental study 
-of plasma sources, and fabrication of micro- or nanostructured surfaces. 
-
-Mr. Author's awards and honors include the Frew Fellowship (Australian 
-Academy of Science), the I. I. Rabi Prize (APS), the European Frequency and 
-Time Forum Award, the Carl Zeiss Research Award, the William F. Meggers 
-Award and the Adolph Lomb Medal (OSA).
-\end{IEEEbiography}
+    \PARstart{I}{nterest} in distributed generation (DG) has been steadily increasing in recent years. Especially in the last decade, the share of renewable energy resources in power networks has been increasing rapidly under the leadership of wind and photovoltaic (PV) power \cite{KOCER2019}. These sources, however, are intermittent by nature, as their power output is directly influenced by weather conditions that may vary vastly throughout the day. In this scenario, battery energy storage systems (BESS) are presented as a way to regulate this uneven generation pattern, benefiting from the benefits of renewable sources while maintaining grid stability.
+
+    %	\footnote{batteries that are no longer suitable for powering vehicles but are still fit for other applications, such as BESS.}
+
+    Likewise, the growing adoption of electric vehicles (EVs) offers new opportunities for microgrid (MG) owners. First, the usage of second-life EV batteries can greatly reduce BESS costs. Secondly, when coupled with a smart charger, an EV can become a distributed energy resource (DER) through a vehicle-to-grid (V2G) system \cite{KEELI2012}. For example, when EV owners arrive home from work and plug their vehicle into a charging station (which usually happens during peak-hours), the remaining battery can be used to supply the grid temporarily and the recharge deferred to a time when energy is cheaper.
+
+    In this scenario, MGs are presented as a way to coordinate the active and reactive power of DERs --- such as generators, storage and controllable loads --- in an optimized manner, satisfying economical and technical objectives.
+
+    Still, the implementation of a MG is still associated with high upfront investments, particularly regarding the BESS. In spite of the estimated 87\% reduction in lithium-ion battery prices from 2010 to 2019 \cite{BBERG2019}, the cost of raw materials still poses a limiting factor on how cheap this technology can get \cite{HSIEH2019}. Thus, as these equipment require considerable investments, the prolongation of their lifespan is crucial to the optimal operation and viability of DG.
+
+    Studies \cite{ECKER2014,NARAYAN2018,DIMEASHATZIARGYRIOU2005,MARYAMA2013} present models based on predefined usage conditions, electrochemistry and techniques such as rain-flow cycle counting to address the problem of battery wear and life expectancy. However, most models expect detailed specifications and experimental data about the batteries that are usually not available or are too expensive to run in large scale.
+
+    This study is arguably a continuation of \cite{HAN2014}, from where we borrowed the concept of a wear density function that could be derived from the achievable cycle count data of batteries. We also work under the same assumptions about BESS usage within a MG: 1) the rate of charge or discharge has negligible effect on battery wear; 2) since ambient temperature cannot be manipulated, it has no impact on control actions and is not accounted for; and 3) charging and discharging are symmetrical and have the same impact on battery life.
+
+    We start this study by presenting the concept of integrating a wear density function to assess the cost of a single charging or discharging event. Next, the relation between battery life and the depth of discharge (DOD) is shown as a common curve available in datasheets, and a generic fitting function for these data is introduced. With some mathematical manipulation, we are able to arrive at a generic model that can be reduced to the same as the one proposed by \cite{HAN2014}, in which the wear cost is defined as a function of the state of charge (SOC) of the battery. After that, the test bench for the wear model is presented: an energy management algorithm of a MG that employs PV, diesel generation and battery storage to avoid excess demand and minimize operational costs. At last, the methodology and the results of the simulations are presented and discussed.
+
+
+    \section{Battery Wear Formulation}
+
+    The wear cost quantification is based on the concept of a wear density function $w(s)$. It takes as argument the SOC of the battery ($s$) and returns a marginal cost in monetary units per battery percentage. Then, a charging/discharging event starting at the initial SOC $s_{0}$ and ending at $s_{f}$ could have its associated wear cost $C_{b}$ evaluated through the following integral:
+    \begin{equation}
+        C_{B}(s_{0}, s_{f}) = \int_{s_{l}}^{s_{u}}w(s)ds
+        \label{eq:Cb(s0,sf)}
+    \end{equation}
+    where $s_{l}$ and $s_{u}$ are the lower and upper SOC boundaries of the charging/discharging event, formally: $s_{l} = min\{s_{0}, s_{f}\}$ and $s_{u} = max\{s_{0}, s_{f}\}$. As such, the value of the definite integral is always positive if $w(s)$ is positive.
+
+    Therefore, by solving this integral we will be able to find a closed-form expression to calculate the wear cost of a single charge or discharge event using only two inputs: starting and final SOC.
+
+    \subsection{Battery cycle life}
+    Lithium-ion batteries do not suffer from ``sudden-death'' failure. Instead they exhibit a gradual decrease in performance over their service life. The end of life might be defined as a reduction in capacity (typically 20 to 30\%) or increase in internal resistance, which may be particularly important in power applications. For example, in \cite{ECKER2014} it is characterized either by battery capacity falling under 70\% of the original or when its internal resistance triples; in \cite{NARAYAN2018} the thresholds are 80\% of the original capacity or 80\% of the state of health, an indicator of overall battery performance.
+
+    Most manufacturers inform battery life in terms of achievable cycle count, that is, the number of charge/discharge events that a battery support before becoming unsuitable for a given application. In this context, each cycle is composed by a discharge, beginning at 100\%, followed by a recharge until 100\%. As illustrated by Fig. \ref{fig:acc_curves1}, batteries have cycle lives that decay exponentially with higher DOD levels.
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.35\textwidth]{figures/acc_curves1.png}
+        \caption{Typical cycle life of lithium-ion batteries as function of DOD \cite{XU2016}.}
+        \label{fig:acc_curves1}
+    \end{figure}
+
+    Note that DOD is defined as the difference between the initial and final SOC, being positive for discharging and negative for recharging. In this formulation it will be represented by the symbol $d$:
+    \begin{equation}
+        d = s_{0}-s_{f}
+        \label{eq:dod(s)}
+    \end{equation}
+
+    Since life cycle information is usually given at discrete DOD levels, it is useful to interpolate those data points. For that, let us define a generic function $ACC(d)$ to represent the achievable cycle count in function of the DOD. This function may have any format in order to better fit different battery chemistries.
+
+    \subsection{Cost per half cycle --- starting at 100\% SOC}
+    Given that $ACC(d)$, independent of its form, yields the number of times that a battery can be cycled, it is logical to assume that if we divide the price of the battery by $ACC(d)$, the result would be the cost associated with one full cycle. Then, to assess the cost of a single half cycle (i.e. either the charging or discharging part of a cycle), this value should further be divided by two, thus:
+    \begin{equation}
+        \mathrm{Cost \; per \; half \; cycle} = \frac{B_{P}}{2 \cdot ACC(|d|)}
+        \label{eq:costPerHalfCycle1}
+    \end{equation}
+    where $B_{P}$ is the battery price and the modulus operator is used to make the expression valid both charging and discharging processes.
+
+    That is, if a half cycle either starts or ends at 100\% SOC, the DOD could be plugged into \eqref{eq:costPerHalfCycle1} and the expression would yield the wear cost associated with that event.
+
+    Therefore, by definition, equation \eqref{eq:costPerHalfCycle1} is a solution to the cost function $C_{B}(s_{0}, s_{f})$ at a specific range, either for charging events, $C_{B}(s_{0}, 1)$, or a discharging events $C_{B}(1, s_{f})$. However, for ranges that neither start or end at 100\% SOC, another expression must be derived.
+
+    \subsection{Cost per half cycle --- any range}
+
+    For charging, we can replace $d=s_{0}-1$ in \eqref{eq:costPerHalfCycle1} and equate it to \eqref{eq:Cb(s0,sf)}, resulting in:
+    \begin{equation}
+        \int_{s_{0}}^{1}w(s)ds = \frac{B_{P}}{2 \cdot ACC(|s_{0}-1|)}
+        \label{eq:costCharging100}
+    \end{equation}
+    where $s_{0}$ is the lower limit of integration because it will always be less or equal to 1 (there are no SOC levels greater than 100\%).
+
+    Expanding the integral on the left hand side of \eqref{eq:costCharging100}:
+    \begin{equation}
+        W(1) - W(s_{0}) = \frac{B_{P}}{2 \cdot ACC(|s_{0}-1|)}
+        \label{eq:fundamentalTheorem1}
+    \end{equation}
+    where $W(s)$ is a primitive of $w(s)$.
+
+    A similar expression can be obtained for the discharging event, when $d=1-s_{f}$, yielding:
+    \begin{equation}
+        W(1) - W(s_{f}) = \frac{B_{P}}{2 \cdot ACC(|1-s_{f}|)}
+        \label{eq:fundamentalTheorem2}
+    \end{equation}
+
+    By subtracting \eqref{eq:fundamentalTheorem2} from \eqref{eq:fundamentalTheorem1} and rewriting in compact integral notation, we arrive at a partial solution to \eqref{eq:Cb(s0,sf)}:
+    \begin{equation}
+        \begin{aligned}
+            \int_{s_{0}}^{s_{f}}w(s)ds = & \frac{B_{P}}{2 \cdot ACC(|s_{0}-1|)}            \\
+            & \;\;\;\; - \frac{B_{P}}{2 \cdot ACC(|1-s_{f}|)}
+        \end{aligned}
+        \label{eq:partialSolution}
+    \end{equation}
+
+    This expression is only valid for $s_{0} \le s_{f}$, that is, for recharging. The process can be repeated for the case where $s_{0} > s_{f}$ and the result would be \eqref{eq:partialSolution} with a flipped sign. Instead, a single closed-form equation can be summarized using the modulus operator. The result is the solution to the cost function $C_{B}(s_{0}, s_{f})$ defined in \eqref{eq:Cb(s0,sf)}:
+    \begin{equation}
+        C_{B}(s_{0}, s_{f}) = \frac{B_{P}}{2} \left| \frac{1}{ACC(1-s_{f})} - \frac{1}{ACC(1-s_{0})} \right|
+        \label{eq:finalSolution}
+    \end{equation}
+    where, since both $s_{0}$ and $s_{f}$ are always less or equal to one, the inner modulus operator was dropped.
+
+    The model proposed in \eqref{eq:finalSolution} is valid through the entire SOC range, 0\% to 100\%, as long as $1/ACC(s)$ is continuous in that same range and, since it does not assume any particular format for the $ACC(d)$, it also is fairly independent of battery chemistry.
+
+    This result adds two levels of abstraction to \cite{HAN2014} because it accepts almost any generic form of $ACC(d)$ without the need to derive a new model. It also uses only the initial and final SOC of each half cycle, therefore there's no need to know the power flow of the battery at each instant, only the amount of energy needed. This provides a more convenient way to calculate costs in energy management systems (EMS).
+
+    \subsection{Curve Fitting Model}
+    As for the cycle life curve $ACC(d)$, the model used in \cite{HAN2014} is the reciprocal function: $ACC(d) = a_{0} \cdot d^{-a_{1}}$, where $a_{0}$ and $a_{1}$ are coefficients of the nonlinear regression. This provides a good fit for the cycle life curve of some specific batteries, especially lead-acid ones, but leaves room for improvement to better fit other chemistries.
+
+    We were able to explore other formats, such as exponential $ACC(d) = a_0 \mathrm{e}^{-a_1 d}$ and logarithmic $ACC(d) = a_0 - a_1 \ln(d)$, and, although these elementary functions performed well on specific batteries, they failed to provide a universal model. Based on empirical data, we found that a more generic result could be obtained by combining the reciprocal function and exponential function:
+    \begin{equation}
+        ACC(d) = a_0 \cdot d^{-a_1} \cdot \mathrm{e}^{-a_2 d}
+        \label{eq:ACC(d)}
+    \end{equation}
+    where $a_0$, $a_1$ and $a_2$ are coefficients that can be obtained by methods such as the least squares fitting.
+
+    Equation \eqref{eq:ACC(d)} proved to be a good empirical model to fit the cycle life curves of different commercial battery chemistries and manufacturers, as shown in Fig. \ref{fig:acc(d)}. Therefore, this was the format chosen to be implemented in this study.
+    \begin{figure}[!h]
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/acc_fitting_NeoVolta_NV24_LiFePO4.pdf}
+            \caption{NeoVolta NV14 (LiFePO4)}
+            \label{fig:accNeovolta}
+        \end{subfigure}
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/acc_fitting_Moura_12MF220_lead-acid.pdf}
+            \caption{Moura 12MF220 (lead-acid)}
+            \label{fig:accMoura}
+        \end{subfigure}
+
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=.8\linewidth]{figures/acc_fitting_Unknown_model_LiPO4.pdf}
+            \caption{Generic model (LiFePO4) \cite{BATUNI2020}}
+            \label{fig:accLipeo4}
+        \end{subfigure}
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=.8\linewidth]{figures/acc_fitting_Rolls_16CH35P_lead-acid.pdf}
+            \caption{Rolls 8 CH 33P (lead-acid)}
+            \label{fig:accNimh}
+        \end{subfigure}
+        \caption{Equation \eqref{eq:ACC(d)} fitted to data from different battery models.}
+        \label{fig:acc(d)}
+    \end{figure}
+
+    \subsection{Normalized Wear Density Function}
+    By taking the partial derivative of \eqref{eq:partialSolution} with respect to $s=s_f$ and dividing it by the capacity $M$ of the battery, we arrive at the normalized wear density function:
+    \begin{equation}
+        w_n(s) = \frac{w(s)}{M} = - \frac{B_P}{2M} \cdot \frac{d}{ds} \left( \frac{1}{ACC(1-s)} \right)
+        \label{eq:wn(s)}
+    \end{equation}
+
+    By substituting \eqref{eq:ACC(d)} in \eqref{eq:wn(s)} and considering $s \le 1$, the normalized wear density function becomes:
+    \begin{equation}
+        w_n(s) = \frac{B_P}{2M} \cdot \frac{a_1(1-s)^{a_1-1} + a_2(1-s)^{a_1}}{a_0} \cdot \mathrm{e}^{a_2(1-s)}
+        \label{eq:wn(s)a0a1a2}
+    \end{equation}
+
+    Although the expression in \eqref{eq:finalSolution} yields the wear cost of cycling the battery, it provides little insight on how the SOC level impacts the cycle life of a battery. For qualitative analysis, the density function such as \eqref{eq:wn(s)a0a1a2}, provides a tool to evaluate the performance of the battery across multiple SOC ranges. Moreover, the average value of the wear density function is also useful when evaluating the overall cost-benefit of different battery models, as it can differentiate batteries not only by price and capacity, but also by durability. The average value of \eqref{eq:wn(s)a0a1a2} is calculated as:
+    \begin{equation}
+        \overline{w_n} = \frac{B_P}{2M} \frac{\mathrm{e}^{a_2}}{a_0}
+    \end{equation}
+
+    \section{Energy Management Model}
+    To test the battery wear model, we modified the energy management algorithm proposed by \cite{SANTOS2018}, which initially used a fixed cost per kilowatt-hour to evaluate the cost of using the BESS. The model implements a day-ahead planning strategy using mixed integer nonlinear programming (MINLP) that aims to minimize the operational cost of a MG composed by a diesel generator, BESS, PV system and a load, as shown in Fig. \ref{fig:mg1}.
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.4\textwidth]{figures/mg2.png}
+        \caption{Diagram of the simulated MG.}
+        \label{fig:mg1}
+    \end{figure}
+
+    The objective of the day-ahead planning is to calculate setpoints that all DERs within the MG should follow in order to supply the load with the lowest operational cost possible. This may lead to strategies such as charging batteries in off-peak hours, with cheap energy, and use that to minimize energy purchase during peak-hours. Therefore the importance of having a model to quantify battery wear.
+
+    The MG is modeled as a single-bus system and, as such, no distribution line losses are considered. The model also does not account for the dynamic behavior of the DERs, as this is attribution of real-time management systems. The day-ahead planning is based on predictions of load profiles and solar generation profiles for the following 24 hours. It considers two electricity tariff levels, for peak and off-peak hours, and two contracted demands, also for peak and off-peak hours. Reverse power-flow (MG exporting power to the utility grid) is rewarded with a feed-in tariff that is a fraction of the energy purchase tariff.
+
+    The model uses a discrete-time approach with finer timesteps for the first hour and larger timestemps for the remaining 23 hours. This ensures higher time-definition for the near-future, where demand and generation forecasts are more precise, but limits computational burden of the optimization process. This is important because day-ahead planning strategies usually update their setpoints every few minutes as real load and generation profiles naturally deviate from predictions, which places a time constraint in solving the optimization problem.
+
+    \subsection{Objective Function}
+    The objective function that defines the optimization problem of this study is the sum of operational costs and energy purchase expenses at each discretization interval:
+    \begin{equation}
+        Z = \sum_{t=1}^T(Z_{IO}[t] + Z_D[t] + Z_B[t] + Z_P[t])
+        \label{eq:z1}
+    \end{equation}
+    where:
+    \begin{itemize}
+        \item $Z$: total operational cost over the simulation period;
+        \item $t$: time-discretization index (1, 2, 3...);
+        \item $T$: discretization interval count;
+        \item $Z_{IO}$: energy import cost ($+$) or export revenue ($-$);
+        \item $Z_{D}$: operational cost of the diesel generator;
+        \item $Z_{B}$: battery wear cost; and
+        \item $Z_{P}$: penalty for exceeding maximum contracted demand.
+    \end{itemize}
+
+    Notice that there is no term associated with PV system power output because its operational cost is usually independent of energy delivery.
+
+    \textbf{Energy import cost and export revenue} --- modeled with a feed-in tariff:
+    \begin{equation}
+        Z_{IO}[t] = \left( \mu_i[t] \cdot P_i[t] - \mu_e[t] \cdot P_e[t] \right) \cdot dt[t]
+    \end{equation}
+    where $\mu_i[t]$ and $\mu_e[t]$ are the purchase and feed-in tariffs parameters, respectively; $P_{i}[t]$ and $P_{e}[t]$ are the power import and export variables, respectively; and $dt[t]$ is the size of the discretization interval parameter. Note that power imported at a rate under the contracted limit is calculated separately from the power imported above the contracted limit, that is, $P_i[t]$ is always lower then the contracted demand.
+
+    \textbf{Diesel fuel cost} --- the cost of diesel fuel, modeled using a quadratic model and a startup cost:
+    \begin{equation}
+        Z_D[t] = \mu_d \cdot (a^{}_d P_d[t]^{2} + b_dP_d[t] + c_d) \cdot dt[t] + S_d[t]
+    \end{equation}
+    where $\mu_d$ is the parameter for diesel cost per liter; $a_d$, $b_d$ and $c_d$ are the consumption parameters of the diesel generator; $P_d[t]$ is the power output variable of the diesel generator; and $S_d[t]$ is the startup cost variable of the generator at each discretization interval, which is zero if the generator has been started at a previous interval or if the power output is zero. The power output of the diesel generator is also subject to minimum and maximum limits.
+
+    \textbf{Maximum demand penalty} --- modeled using a very high tariff for power import:
+    \begin{equation}
+        Z_P[t] = \mu_{pi}[t] \cdot P_{pi}[t] \cdot dt[t]
+    \end{equation}
+    where $\mu_{pi}[t]$ is the parameter that defines the tariff for buying power at a rate above the contracted limit, usually several times higher then $\mu_i[t]$; and $P_{pi}[t]$ is the variable for importing power above the contracted limit, which is only greater then zero when $P_i[t]$ has reached the contracted demand limit.
+
+    \textbf{Battery wear cost} --- obtained by substituting \eqref{eq:ACC(d)} in \eqref{eq:finalSolution}, where the initial and final SOC, $s_0$ and $s_f$, become $s[t-1]$ and $s[t]$, respectively:
+    \begin{equation}
+        \begin{aligned}
+            C_b[t] & = \frac{B_P}{2a_0} \Bigg|(1-s[t])^{a_1}\mathrm{e}^{a_2(1-s[t])} \\
+            & - (1-s[t-1])^{a_1}\mathrm{e}^{a_2(1-s[t-1])} \Bigg|
+        \end{aligned}
+    \end{equation}
+
+    In order to realize the power balance of the MG, power output of the battery is calculated by converting battery percentage to energy transfer rate, i.e. $P_b[t] = \frac{M(s[t]-s[t-1])}{dt[t]}$, which is negative for battery recharge.
+
+    The complete MINLP model is available on the GitHub repository \href{https://github.com/lucasrhode95/adams}{github.com/lucasrhode95/adams}, where we also made available an application for day-ahead planning simulations.
+
+    \section{Methodology \& Simulations}
+    Parameters for the simulations were based on commercially available products and average electricity rates in the United States. The diesel generator parameters are from Caterpillar's DE22E3 22 kVA model; the residential load profile was borrowed from the U.S. Department of Energy public database \cite{DOE2013}, scaled to achieve a consumption of 300 kWh/day; and the PV generation is a generic autumn profile, delivering 100 kWh/day. The net load profile (load minus PV generation) is shown in Fig. \ref{fig:net-load}, where it can be seen that the PV generation exceeds demand from 10 a.m. to 14 a.m.
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.3\textwidth]{figures/net_load.pdf}
+        \caption{Profiles for residential load, PV generation and the resulting net load used.}
+        \label{fig:net-load}
+    \end{figure}
+
+    For batteries, two commercially available options were considered: NeoVolta's NV14 (14.4 kWh) and Rolls' 8 CH 33P (7.12 kWh), hereafter referred as BESS A and BESS B, respectively.
+
+    The cycle life curve of both systems were shown in Fig. \ref{fig:acc_curves1}, while the wear density of both is shown in Fig. \ref{fig:wn_curves1}, where the lowest wear density points are highlighted: 0.088123 USD/kWh at 87\% SOC for BESS A, and 0.18287 USD/kWh at 75\% SOC for BESS B. It also can be observed that wear density increases at both ends of the SOC, an expected result given that both very low and very high SOC levels are known to reduce battery life \cite{ECKER2014, WIKNER2018}.
+    \begin{figure}[!h]
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/marginal_NeoVolta_NV24_LiFePO4.pdf}
+            \caption{BESS A (LiFePO4)}
+            \label{fig:wn_curves1A}
+        \end{subfigure}
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/marginal_Rolls_8CH33P_lead-acid.pdf}
+            \caption{BESS B (lead-acid)}
+            \label{fig:wn_curves1B}
+        \end{subfigure}
+        \caption{Wear density function \eqref{eq:wn(s)a0a1a2} of both batteries.}
+        \label{fig:wn_curves1}
+    \end{figure}
+
+    For the tests, both systems were considered to have an efficiency of 94\%, a self discharge rate of 0.2 \%/hour and charge/discharge rate was limited to 0.5C.
+
+    As for the electricity tariffs, off-peak prices were set at 0.1048 USD/kWh and peak prices at 0.2096 USD/kWh. Feed-in tariff was set at 0.035 USD/kWh for peak and off-peak hours. The contracted demand at was defined as 23 kW and 18.4 kW for off-peak and peak-hours, respectively. Above these limits, tariffs were defined as 10 USD/kWh for off-peak hours and 20 USD/kWh for peak-hours.
+
+    In order to keep both systems with roughly the same capacity, we considered that BESS B is composed of two batteries, therefore doubling its cost and capacity to 13,000 USD and 14.24 kWh, respectively.
+
+    In addition, the SOC of both systems were set to start and end at 50\%, so that all energy usage must be replenished before the end of the day, plus losses.
+
+    \subsection{Results}
+    There were four scenarios analyzed with varying composition of BESS models and diesel generator availability, always under the same net load presented in Fig. \ref{fig:net-load}. The scenarios analyzed and their respective operational cost for a simulated 24-hour operation were:
+    \begin{enumerate}
+        \item \label{item:bessa+diesel} \textbf{Scenario \ref{item:bessa+diesel}:} BESS A + diesel generator, 29.7763 USD;
+        \item \label{item:bessb+diesel} \textbf{Scenario \ref{item:bessb+diesel}:} BESS B + diesel generator, 30.7006 USD;
+        \item \label{item:bessb} \textbf{Scenario \ref{item:bessb}:} BESS B only, 31.7940 USD;
+        \item \label{item:diesel} \textbf{Scenario \ref{item:diesel}:} Diesel generator only, 30.6420 USD.
+    \end{enumerate}
+
+    Considering an error tolerance of 1\%, scenarios \ref{item:bessb+diesel} and \ref{item:diesel} are equivalent in regard of operational cost. That is, the addition of BESS B to a system where there is already a diesel generator produces no substantial benefit from the energy management perspective alone. However, there are indubitably many advantages of having both systems at disposal and, as such, this result should not be taken as definitive for all cases.
+
+    The detailed results of the day-ahead planning for scenarios \ref{item:bessa+diesel} and \ref{item:bessb+diesel} are shown in Fig. \ref{fig:results}, with the following highlights:
+    \begin{figure}[!h]
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/residential_nv14_power.pdf}
+            \caption{Power curves for scenario \ref{item:bessa+diesel}}
+            \label{fig:result-power-A}
+        \end{subfigure}
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/residential_8ch33p_power.pdf}
+            \caption{Power curves for scenario \ref{item:bessb+diesel} }
+            \label{fig:result-power-B}
+        \end{subfigure}
+
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/residential_nv14_soc.pdf}
+            \caption{Battery's SOC for scenario \ref{item:bessa+diesel}}
+            \label{fig:result-soc-A}
+        \end{subfigure}
+        \begin{subfigure}{.235\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{figures/residential_8ch33p_soc.pdf}
+            \caption{Battery's SOC for scenario \ref{item:bessb+diesel}}
+            \label{fig:result-soc-B}
+        \end{subfigure}
+        \caption{Results of the day-ahead planning for each battery system.}
+        \label{fig:results}
+    \end{figure}
+
+    \begin{itemize}
+        \item \textbf{0 a.m. -- 6 a.m.:} no PV generation, load is supplied only by the grid while, in both cases, neither BESS nor diesel generator is active. Batteries self discharge at a 0.2\% rate;
+        \item \textbf{6 a.m. -- 10 a.m.:} PV generation gradually increases, until net load drops to zero;
+        \item \textbf{10 a.m. -- 3 p.m.:} PV generation continues to increase, surpassing demand. Excess generation is used to charge batteries from 49.0\% to 99.0\% in scenario \ref{item:bessa+diesel} and to 66.0\% in scenario \ref{item:bessb+diesel};
+        \item \textbf{3 p.m. -- 6 p.m.:} PV generation gradually decreases until zero. Batteries are kept in stand-by;
+        \item \textbf{6 p.m. -- 9 p.m.:} to avoid excess demand and subsequent penalties, BESS A is cycled from 99.0\% to 26.2\% to diminish energy purchase in scenario \ref{item:bessa+diesel}, supplying roughly 10.5 kWh to the system. In contrast, in scenario \ref{item:bessb+diesel}, the diesel generator is started at 6 p.m. and stopped at 8 p.m., delivering exactly 32 kWh in two hours. This power output is more than enough to avoid excess demand and also to minimize peak-hour energy purchase --- until the quadratic consumption model limits its benefits. In the following hour, from 8 p.m. until 9 p.m., BESS B is cycled from 65.4\% to 50.3\% to supply the system.
+        \item \textbf{9 p.m. -- 12 p.m.} the load curve starts to fade to a minimum whilst BESS A is recharged in scenario \ref{item:bessa+diesel} and BESS B is kept in stand-by until midnight on \ref{item:bessb+diesel}.
+    \end{itemize}
+
+    The main difference between scenarios \ref{item:bessa+diesel} and \ref{item:bessb+diesel} is notably the much deeper DOD cycle that BESS A experiences. This is due to the lower marginal cost when compared to BESS B, as can be seen in Fig. \ref{fig:wn_curves1}.
+
+    Another interesting result is the choice of SOC range that the optimizer made for BESS A. The 10.5 kWh that it delivered represents 73\% of its capacity, and could have been cycled in either 100\%-27\% or 73\%-0\% ranges, for example. However, the 99\%-26\% indicates that the optimizer avoided the steep wear density rise near 100\% but also tried to avoid the slowly increasing wear cost near the lower end of the SOC. The same trend is observed in scenario \ref{item:bessb+diesel} but, with a much more steep rise near 100\% and overall higher wear cost, the battery is only cycled with a DOD little greater than 16\%.
+
+    \section{Conclusion}
+    Although battery wear is sometimes neglected in MG applications, it is important to incorporate a wear quantification model to avoid abusive use of the storage system. In this study we augmented the reach of a popular model by re-deriving it using a generic approach for fitting the most pervasive cycle life data that is usually made available by manufacturers. We also provided a mathematical formula that enables MG planners to evaluate and compare batteries across the entire SOC range, taking into account not only price and capacity, but also the durability of storage devices, and that could be easily customized for various batteries. The model, although simple, proved to be very useful in the implementation of an energy management algorithm that considers and minimizes battery wear, as shown by the case studies presented here, which can effectively prolong the lifespan of these devices.
+
+    \bibliographystyle{./IEEEtran}
+    \bibliography{./bibliography}
 
 \EOD
 
