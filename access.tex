@@ -1,67 +1,76 @@
 \documentclass{ieeeaccess}
 
+% Custom packages
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
+\usepackage[nolist, printonlyused]{acronym}
 
+% Template packages
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
 \begin{document}
-\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
-\doi{10.1109/ACCESS.2017.DOI}
+    \input{my_acronyms}
 
-\title{Battery Wear Model Applied to BESS Optimization in Microgrids}
+    \history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+    \doi{10.1109/ACCESS.2017.DOI}
 
-\author{
-	\uppercase{Lucas B. Rhode}\authorrefmark{1},
-	\uppercase{Adriano B. de Almeida}\authorrefmark{2}
-	\uppercase{and Marcos A. Izumida}\authorrefmark{3}
-}
-\address[1]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: lrh@certi.org.br)}
-\address[2]{Western Parana State University, Brazil (e-mail: adriano.almeida@unioeste.br)}
-\address[3]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: mlz@certi.org.br)}
+    \title{A Novel Battery Wear Model For Energy Management In Microgrids}
 
-\markboth
-{Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
-{Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+    \author{
+    	\uppercase{Lucas B. Rhode}\authorrefmark{1},
+    	\uppercase{Adriano B. de Almeida}\authorrefmark{2}
+    	\uppercase{and Marcos A. Izumida}\authorrefmark{3}
+    }
+    \address[1]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: lrh@certi.org.br)}
+    \address[2]{Western Parana State University, Brazil (e-mail: adriano.almeida@unioeste.br)}
+    \address[3]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: mlz@certi.org.br)}
 
-\corresp{Corresponding author: Lucas B. Rhode (e-mail: lrh@certi.org.br)}
+    \markboth
+    {Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
+    {Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
 
-\begin{abstract}
-    This paper proposes a novel battery wear model for microgrid (MG) energy management applications. This model is based on a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications. The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is incorporated into an energy management algorithm to optimize the operation of a grid-connected MG using a day-ahead planning strategy. To test the model, four simulated scenarios are considered in an MG composed of a diesel generator, a photovoltaic (PV) system, a residential load and, naturally, a battery storage system (BESS). The inclusion of the battery wear model leads the optimizer to be more selective about battery usage, cycling the battery at SOC levels that minimized battery wear, effectively prolonging its lifespan.
-\end{abstract}
+    \corresp{Corresponding author: Lucas B. Rhode (e-mail: lrh@certi.org.br)}
 
-\begin{keywords}
-    battery management systems, energy storage, energy management, microgrids
-\end{keywords}
+    \begin{abstract}
+        This paper proposes a novel battery wear model for \ac{MG} energy management applications. This model is based on a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications. The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is incorporated into an energy management algorithm to optimize the operation of a grid-connected MG using a day-ahead planning strategy. To test the model, four simulated scenarios are considered in an MG composed of a diesel generator, a photovoltaic (PV) system, a residential load and, naturally, a battery storage system (BESS). The inclusion of the battery wear model leads the optimizer to be more selective about battery usage, cycling the battery at SOC levels that minimized battery wear, effectively prolonging its lifespan.
+    \end{abstract}
 
-\titlepgskip=-15pt
+    \begin{keywords}
+        battery management systems, energy storage, energy management, microgrids
+    \end{keywords}
 
-\maketitle
+    \titlepgskip=-15pt
 
-\section{Introduction}
-\label{sec:introduction}
-    \PARstart{W}{ind} and solar power have become a significant part of the world's energy matrix. Especially in the last decade, the share of renewable sources in power networks has been increasing rapidly driven by wind and photovoltaic (PV) systems, accounting for 11\% of the global electricity production in 2020 \cite{KOCER2019}\cite{EMBER2021}. These sources, however, are intermittent by nature, as their power output is directly influenced by weather conditions that may vary vastly throughout the day. In this scenario, battery energy storage systems (BESS) are presented as a way to regulate this uneven generation pattern, taking advantage of the benefits of renewable sources while maintaining grid stability.
+    \maketitle
 
-    Likewise, the growing adoption of electric vehicles (EVs) offers new opportunities for microgrid (MG) owners. First, the usage of second-life EV batteries can greatly reduce BESS costs. Secondly, when coupled with a smart charger, an EV can become a distributed energy resource (DER) through a vehicle-to-grid (V2G) system \cite{KEELI2012}. For example, when EV owners arrive home from work and plug their vehicle into a charging station (which usually happens during peak-hours), the remaining battery can be used to supply the grid temporarily and the recharge deferred to a time when energy is cheaper.
+    \section{Introduction}
+    \label{sec:introduction}
+        \PARstart{E}{lectricity} has become an essential element for society in the last century. With growing energy consumption aggravating the rise in CO\textsubscript{2} emissions, achieving full sustainability is one of the greatest challenges of our modern society. As part of this effort, grid operators are continually deploying new \acp{REG}, such as wind farms and \ac{PV} power stations, supplying a record high of more than 11\% of the world's electricity in 2020 \cite{EMBER2021}.
 
-    In this scenario, MGs are presented as a way to coordinate the active and reactive power of DERs --- such as generators, storage and controllable loads --- in an optimized manner, satisfying economical and technical objectives.
+        In \iac{MG}, the role of \acp{REG} is vital and as such, \acp{ESS} are one of the main components in these environments. While traditional sources can store energy in fuels tanks, water reservoirs and kinetic energy; many renewable sources need external devices to store their output when it is abundant, to later return it to the grid \cite{STECCA2020}. In fact, with the combination of storage and \acp{REG}, an \ac{EMS} can coordinate resources to achieve increased system efficiency by flattening the demand curve compensating for generation-demand mismatches, using techniques such as time-shifting, peak shaving and valley filling \cite{WANG20196201, LI2020106058, PARRA2015576, ZHANG2019772}.
 
-    However, the implementation of an MG is still associated with high upfront investments, particularly regarding the BESS. In spite of the estimated 87\% reduction in lithium-ion battery prices from 2010 to 2019 \cite{BBERG2019}, the cost of raw materials still poses a limiting factor on how cheap this technology can get \cite{HSIEH2019}. Thus, as these equipment require considerable investments, the prolongation of their lifespan is crucial to the optimal operation and viability of DG.
+        There are many different types of devices that store energy, however,\ac{BESS} are usually the most technical fit choice for energy management applications. It presents good response time and cycle life, good efficiency and technical maturity that made it emerge as one of the main forms of energy storage in \acp{MG} \cite{KOCER2019, martins2018optimal, FU20136749070}.
 
-    Studies \cite{ECKER2014,NARAYAN2018,DIMEASHATZIARGYRIOU2005,MARYAMA2013} present models based on predefined usage conditions, electrochemistry and techniques such as rain-flow cycle counting to address the problem of battery wear and life expectancy. However, most models expect detailed specifications and experimental data about the batteries that are usually not available or are too expensive to run in large scale.
+        Lithium-ion and lead-acid are the main of batteries chemistry used in modern \ac{BESS} applications \cite{FU20136749070, ALSAIDAN8094981}. Historically, lead-acid batteries were preferred for their lower upfront, but recently electric vehicles and associated mass production have drastically reduced the cost of lithium-ion cells \cite{BBERG2020} with some sources indicating an equality between the cost per kWh of the two technologies in 2020\cite{mongird20202020}. This makes this type of batteries a more attractive choice for its greater overall performance and durability \cite{wang2013li, xu2010lithium}.
 
-    This study is arguably a continuation of \cite{HAN2014}, from where we borrowed the concept of a wear density function that could be derived from the achievable cycle count data of batteries. We also work under the same assumptions about BESS usage within an MG: 1) the rate of charge or discharge has negligible effect on battery wear; 2) since ambient temperature cannot be manipulated, it has no impact on control actions and is not accounted for; and 3) charging and discharging are symmetrical and have the same impact on battery life.
+        Yet, prolonging the durability of battery cells is still an ongoing study, with manufacturers and researches exploring new compositions that are expected to deliver more durable cells \cite{mainar2018systematic, xie2018long, wang2019high, shen2019li}. Furthermore, even with the aforementioned price reduction, the capital investment and replacement cost of batteries is currently high \cite{mongird20202020, liao2018bess}, which is aggravated by the limited lifespan of these devices when compared to other power grid components \cite{mun2021study}. For that reason, it is important to optimize the operation of these devices to maximize the benefit they bring to the grid.
 
-    We start this study by presenting the concept of integrating a wear density function to assess the cost of a single charging or discharging event. Next, the relation between battery life and the depth of discharge (DOD) is shown as a common curve available in datasheets, and a generic fitting function for these data is introduced. With some mathematical manipulation, we are able to arrive at a generic model that can be reduced to the same as the one proposed by \cite{HAN2014}, in which the wear cost is defined as a function of the state of charge (SOC) of the battery. After that, the test bench for the wear model is presented: an energy management algorithm of an MG that employs PV, diesel generation and battery storage to avoid excess demand and minimize operational costs. At last, the methodology and the results of the simulations are presented and discussed.
+        Studies \cite{ECKER2014,NARAYAN2018,DIMEASHATZIARGYRIOU2005,MARYAMA2013} present models based on predefined usage conditions, electrochemistry and techniques such as rain-flow cycle counting to address the problem of battery wear and life expectancy. However, most models expect detailed specifications and experimental data about the batteries that are usually not available or are too expensive to run in large scale.
+
+        This study is arguably a continuation of \cite{HAN2014}, from where we borrowed the concept of a wear density function that could be derived from the achievable cycle count data of batteries. We also work under the same assumptions about BESS usage within an MG: 1) the rate of charge or discharge has negligible effect on battery wear; 2) since ambient temperature cannot be manipulated, it has no impact on control actions and is not accounted for; and 3) charging and discharging are symmetrical and have the same impact on battery life.
+
+        We start this study by presenting the concept of integrating a wear density function to assess the cost of a single charging or discharging event. Next, the relation between battery life and the depth of discharge (DOD) is shown as a common curve available in datasheets, and a generic fitting function for these data is introduced. With some mathematical manipulation, we are able to arrive at a generic model that can be reduced to the same as the one proposed by \cite{HAN2014}, in which the wear cost is defined as a function of the state of charge (SOC) of the battery. After that, the test bench for the wear model is presented: an energy management algorithm of an MG that employs PV, diesel generation and battery storage to avoid excess demand and minimize operational costs. At last, the methodology and the results of the simulations are presented and discussed.
 
 
-    \section{Battery Wear Formulation}
+\section{Battery Wear Formulation}
 
     The wear cost quantification is based on the concept of a wear density function $w(s)$. It takes as argument the SOC of the battery ($s$) and returns a marginal cost in monetary units per battery percentage. Then, a charging/discharging event starting at the initial SOC $s_{0}$ and ending at $s_{f}$ could have its associated wear cost $C_{b}$ evaluated through the following integral:
     \begin{equation}
