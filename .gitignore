@@ -53,3 +53,4 @@ Thumbs.db
 *.gz
 *.aux
 access.pdf
+*.out
