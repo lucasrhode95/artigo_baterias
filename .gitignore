@@ -48,6 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
-access.bbl
-access.blg
-access.synctex.gz
+*.bbl
+*.blg
+*.gz
+*.aux
+access.pdf
+*.out
