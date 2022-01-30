@@ -25,22 +25,23 @@
     \title{A Novel Battery Wear Model For Energy Management In Microgrids}
 
     \author{
-    	\uppercase{Lucas B. Rhode}\authorrefmark{1},
-    	\uppercase{Adriano B. de Almeida}\authorrefmark{2}
-    	\uppercase{and Marcos A. Izumida}\authorrefmark{3}
+    	\uppercase{Marcos Aurelio Izumida Martins}\authorrefmark{1}
+    	\uppercase{Lucas B. Rhode}\authorrefmark{2},
+    	\uppercase{and Adriano B. de Almeida}\authorrefmark{3}
     }
-    \address[1]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: lrh@certi.org.br)}
-    \address[2]{Western Parana State University, Brazil (e-mail: adriano.almeida@unioeste.br)}
-    \address[3]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: mlz@certi.org.br)}
+
+    \address[1]{Sustainable Energies Center, CERTI Foundation, Brazil (e-mail: mlz@certi.org.br)}
+    \address[2]{Underwriters Laboratories, Brazil (e-mail: lucas.rhode@ul.com)}
+    \address[3]{Western Parana State University, Brazil (e-mail: adriano.almeida@unioeste.br)}
 
     \markboth
     {Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
     {Author \headeretal: Preparation of Papers for IEEE TRANSACTIONS and JOURNALS}
 
-    \corresp{Corresponding author: Lucas B. Rhode (e-mail: lrh@certi.org.br)}
+    \corresp{Corresponding author: Marcos A. I. Martins (e-mail: mlz@certi.org.br)}
 
     \begin{abstract}
-        This paper proposes a novel battery wear model for \ac{MG} energy management applications. This model is based on a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications. The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is incorporated into an energy management algorithm to optimize the operation of a grid-connected \ac{MG} using a day-ahead planning strategy. To test the model, four simulated scenarios are considered in \iac{MG} composed of a diesel generator, a \ac{PV} system, a residential load and, naturally, a battery storage system (\ac{BESS}). The inclusion of the battery wear model leads the optimizer to be more selective about battery usage, cycling the battery at \ac{SOC} levels that minimized battery wear, effectively prolonging its lifespan.
+        This paper proposes a novel battery wear model for \ac{MG} energy management applications. This model is based on a popular battery wear model originally proposed for vehicle-to-grid (V2G) applications. The presented model can be easily parameterized to fit the cycle life data of almost any battery and yields the wear cost of a charge/discharge event as function of the variation in the state of charge (SOC) of the battery. This wear model is incorporated into an energy management algorithm to optimize the operation of a grid-connected \ac{MG} using a day-ahead planning strategy. To test the model, four simulated scenarios are considered in \iac{MG} composed of a \ac{DG}, a \ac{PV} system, a residential load and, naturally, a battery storage system (\ac{BESS}). The inclusion of the battery wear model leads the optimizer to be more selective about battery usage, cycling the battery at \ac{SOC} levels that minimized battery wear, effectively prolonging its lifespan.
     \end{abstract}
 
     \begin{keywords}
@@ -75,7 +76,7 @@
 
     These approaches can certainly be made highly accurate with increased model complexity and data availability. However, in a centralized \acp{EMS} responsible for managing multiple microgrids across various locations the communication and hardware requirements for acquiring and processing all the necessary data can limit the applicability of these models \cite{DIMEASHATZIARGYRIOU2005}.
 
-    As such, this paper seeks to provide a lightweight semi-empirical model in which the precision can be adjusted according to available processing power. More specifically, it proposes a novel aging model that blends both model and experimental-based approaches that require only simple \ac{ACC} curves that can be obtained relatively easily from datasheets or manufacturers and resellers. The goal of this formulation is to provide a simple wear cost quantifier that can be used to orientate the \ac{EMS} of \iac{MG} as to whether or not use the \ac{BESS} in detriment of other strategies -- such as dispatching diesel generators or purchasing power from the utility grid -- rather then providing a highly accurate battery state predictor.
+    As such, this paper seeks to provide a lightweight semi-empirical model in which the precision can be adjusted according to available processing power. More specifically, it proposes a novel aging model that blends both model and experimental-based approaches that require only simple \ac{ACC} curves that can be obtained relatively easily from datasheets or manufacturers and resellers. The goal of this formulation is to provide a simple wear cost quantifier that can be used to orientate the \ac{EMS} of \iac{MG} as to whether or not use the \ac{BESS} in detriment of other strategies -- such as dispatching \ac{DG}s or purchasing power from the utility grid -- rather then providing a highly accurate battery state predictor.
 
     We base our modified wear cost model on \cite{HAN2014} and add (i) a generic formulation, from which operators can derive their own customized models; (ii) a concrete implementation of that formulation that can be parameterized to fit lead-acid and \ac{LIB} aging curves; (iii) a linearization of this implementation that can be directly applied into \ac{MILP} solvers.
 
@@ -85,7 +86,7 @@
 
     While batteries used for automotive and frequency regulation purposes usually required high instant power, peak-shaving and \ac{PV}-\ac{BESS} applications storage capacity is usually a bigger concern. Studies \cite{hesse2017lithium, sufyan2019optimal, asano2007methodology} indicate that for these applications, lower power-to-energy ratios are preferred and batteries are usually operated for a few hours under 1C rates. At this current level, other variables have a much higher impact on aging, namely the cut-off voltage, which directly correlates to the \ac{SOC}; the amount of energy transferred (\ac{DOD}) and the temperature \cite{HAN2014}.
     
-    For an \ac{EMS}, the best way to quantify the wear of a battery is to correlate the energy transferred to or from it to a monetary cost, in \$ per Wh preferrably. If a model is able to provide that, a grid operator can directly compare the cost of a charge/discharge cycle against the cost of dispatching a diesel generator or any other source.
+    For an \ac{EMS}, the best way to quantify the wear of a battery is to correlate the energy transferred to or from it to a monetary cost, in \$ per Wh preferrably. If a model is able to provide that, a grid operator can directly compare the cost of a charge/discharge cycle against the cost of dispatching a \ac{DG} or any other source.
     
     In fact, for an infinitesimal variation on \ac{SOC}, $ds$, there will be an infinitesimal wear cost, $dC_b$, in which the ratio of these two quantities yields a marginal wear cost, or a Wear Cost Density Function, $w(s)$:
 %    \begin{equation}
@@ -93,37 +94,28 @@
 %    	\label{eq:derivation_dc_ds}
 %    \end{equation}
     
-    Then, a recharge or discharge event starting at the initial \ac{SOC} $s_{0}$ and ending at $s_{f}$ could have its associated wear cost $C_{b}$ evaluated through the following integral:
-    $$ C_{B}(s_{0}, s_{f}) = \int_{s_{l}}^{s_{u}}w(s)ds $$
+    Then, a recharge or discharge event starting at the initial \ac{SOC} $s_{0}$ and ending at $s_{f}$ could have its associated wear cost $C_b$ evaluated through the following integral:
+    $$ C_b(s_{0}, s_{f}) = \int_{s_{l}}^{s_{u}}w(s)ds $$
     where $s_{l}$ and $s_{u}$ are the lower and upper \ac{SOC} boundaries of the charging/discharging event, formally: $s_{l} = min\{s_{0}, s_{f}\}$ and $s_{u} = max\{s_{0}, s_{f}\}$ so that the wear cost is always positive.
     
     In this simple formulation, it can be observed that the event cost ($C_b$) is function of two variables ($s_0$ and $s_f$). This directly brings two of the main affecting variables into the model: \ac{SOC} and \ac{DOD}. The third factor, temperature, will be considered constant throughout a single event and shall be applied as a adjusting factor:
     \begin{equation}
-    	C_{B}(s_{0}, s_{f}) = \alpha \int_{s_{l}}^{s_{u}}w(s)ds
+    	C_b(s_{0}, s_{f}) = \alpha \int_{s_{l}}^{s_{u}}w(s)ds
     	\label{eq:Cb(s0,sf)}
     \end{equation}
-	where $\alpha$ is a coefficient that varies with battery temperature.
+	where $\alpha$ is a coefficient that varies with battery temperature. The farther away from the optimal operational point (usually around 25 \textdegree C), the greater this coefficient will be.
 %	$$ \alpha(T)=t_0 \cdot e^{t_1|T_0 - T|} $$
 
 	Therefore, by solving this integral we will be able to find a closed-form expression to calculate the wear cost of a single charge or discharge event using only two variables: start and final \ac{SOC}.
-    
-	
-
-%    The battery lifetime published by manufactures usually assumes that the battery is fully
-%charged and discharged each cycle at an ideal ambient temperature
-%
-
-%    usou custo fixo R$/kWh para desgaste: https://www.sciencedirect.com/science/article/pii/S0378779616304692
 
     \subsection{Battery cycle life}
     Batteries usually do not suffer from ``sudden-death'' failure, but instead exhibit a gradual decrease in performance over their service life. The \ac{EOL} might be defined as a reduction in capacity (typically 20 to 30\%) or an increase in internal resistance. For example, in \cite{ECKER2014} it is characterized either by battery capacity falling under 70\% of the original or when its internal resistance triples; in \cite{NARAYAN2018} the thresholds are 80\% of the original capacity or 80\% of the \ac{SOH}.
 
-    Most manufacturers inform battery life in terms of \ac{ACC} at a given \ac{DOD}, that is, the number of full discharge-recharge events that a battery supports at a given depth of discharge before reaching its \ac{EOL}. In this context, each cycle is composed by a discharge, beginning at 100\%, followed by a recharge until 100\%. As illustrated in Fig. \ref{fig:acc_curves1}, batteries have cycle lives that decay exponentially with higher \ac{DOD} levels.
-
+    Most manufacturers inform battery life in terms of \ac{ACC} at a given \ac{DOD}, that is, the number of full discharge-recharge events that a battery supports at a given depth of discharge before reaching its \ac{EOL}. In this context, each cycle starts at 100\% \ac{SOC} followed by a discharge event of a certain depth and finishes with a recharge back to 100\%. As illustrated in Fig. \ref{fig:acc_curves1}, the cycle life of a battery decays exponentially with higher \ac{DOD} levels.
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.45\textwidth]{figures/acc_curves1.png}
-        \caption{Typical cycle life of lithium-ion batteries as function of \ac{DOD} \cite{XU2016}.}
+        \caption{Typical cycle life of \acp{LIB} as function of \ac{DOD} \cite{XU2016}.}
         \label{fig:acc_curves1}
     \end{figure}
 
@@ -135,7 +127,7 @@
 
     Since life cycle information is usually given at discrete \ac{DOD} levels, it is useful to interpolate those data points. For that, we define a generic function $ACC(dod)$ that may have any format in order to better fit different wear curves.
     
-    The form used for $ACC(dod)$ in \cite{HAN2014} is the reciprocal function: $ACC(dod) = a_{0} \cdot d^{-a_{1}}$, where $a_{0}$ and $a_{1}$ are coefficients obtained through curve fitting. This provides a good fit for the \ac{ACC} curve of some wear curves but leaves room for improvement into a more universal form.
+    The form used for $ACC(dod)$ in \cite{HAN2014} is the reciprocal function: $ACC(dod) = a_{0} \cdot dod^{-a_{1}}$, where $a_{0}$ and $a_{1}$ are coefficients obtained through curve fitting. This provides a good fit for the \ac{ACC} curve of some wear curves but leaves room for improvement into a more universal form.
     
     Other formats are able to produce good fits, such as the exponential $ACC(dod) = a_0 \mathrm{e}^{-a_1 d}$ and logarithmic $ACC(dod) = a_0 - a_1 \ln(dod)$ forms. Although these elementary functions performed well on specific batteries, they alone fail to provide a universal model. In light of this, the authors propose a combination of the reciprocal and exponential functions:
     \begin{equation}
@@ -191,7 +183,7 @@
         \label{eq:costPerHalfCycle1}
     \end{equation}
 
-    That is, if a half cycle either starts or ends at 100\% \ac{SOC}, the \ac{DOD} could be plugged into \eqref{eq:costPerHalfCycle1} and the expression would yield the wear cost associated with that event. As such, by definition, equation \eqref{eq:costPerHalfCycle1} is a solution to the cost function $C_{B}(s_{0}, s_{f})$ with $s_0 = 1$ for discharing or $s_f = 1$ for charing. However, for ranges that neither start nor end at 100\% \ac{SOC}, a more general expression must be derived.
+    That is, if a half cycle either starts or ends at 100\% \ac{SOC}, the \ac{DOD} could be plugged into \eqref{eq:costPerHalfCycle1} and the expression would yield the wear cost associated with that event. As such, by definition, equation \eqref{eq:costPerHalfCycle1} is a solution to the cost function $C_b(s_{0}, s_{f})$ with $s_0 = 1$ for discharing or $s_f = 1$ for charing. However, for ranges that neither start nor end at 100\% \ac{SOC}, a more general expression must be derived.
 
     \subsection{Cost per cycle --- any range}
 
@@ -214,7 +206,7 @@
     A similar expression can be obtained for a discharging event, when $dod=|1-s_{f}|$, yielding:
     \small
 %    \begin{equation}
-         $$ \int_{s_{f}}^{1}w(s)ds = W(1) - W(s_{f}) = \frac{B_{P}}{2 \; ACC(|1-s_{f}|)} $$
+         $$ \int_{s_{f}}^{1}w(s)ds = W(1) - W(s_{f}) = \frac{\alpha B_{P}}{2 \; ACC(|1-s_{f}|)} $$
 %        \label{eq:fundamentalTheorem2}
 %    \end{equation}
 	\normalsize
@@ -222,15 +214,15 @@
     By subtracting the second expression from the first and rewriting in compact integral notation, we arrive at a partial solution to \eqref{eq:Cb(s0,sf)}:
     \small
 %    \begin{equation}
-       $$ \int_{s_{0}}^{s_{f}}w(s)ds = \frac{B_{P}}{2 \; ACC(|s_{0}-1|)} - \frac{B_{P}}{2 \; ACC(|1-s_{f}|)} $$
+       $$ \int_{s_{0}}^{s_{f}}w(s)ds = \frac{\alpha B_{P}}{2 \; ACC(|s_{0}-1|)} - \frac{\alpha B_{P}}{2 \; ACC(|1-s_{f}|)} $$
 %        \label{eq:partialSolution}
 %    \end{equation}
 	\normalsize
 
-    This expression is only positive for $s_{0} \le s_{f}$, that is, for recharging. The process can be repeated for the case where $s_{0} > s_{f}$ and the result would be the same expression with a flipped sign. Instead, a single closed-form equation can be summarized using the modulus operator. The result is the solution to the cost function $C_{B}(s_{0}, s_{f})$ defined in \eqref{eq:Cb(s0,sf)}:
+    This expression is only positive for $s_{0} \le s_{f}$, that is, for recharging. The process can be repeated for the case where $s_{0} > s_{f}$ and the result would be the same expression with a flipped sign. Instead, a single closed-form equation can be summarized using the modulus operator. The result is the solution to the cost function $C_b(s_{0}, s_{f})$ defined in \eqref{eq:Cb(s0,sf)}:
     \small
     \begin{equation}
-        C_{B}(s_{0}, s_{f}) = \frac{B_{P}}{2} \left| \frac{1}{ACC(1-s_{f})} - \frac{1}{ACC(1-s_{0})} \right|
+        C_b(s_{0}, s_{f}) = \frac{\alpha B_{P}}{2} \left| \frac{1}{ACC(1-s_{f})} - \frac{1}{ACC(1-s_{0})} \right|
         \label{eq:finalSolution}
     \end{equation}
 	\normalsize
@@ -238,46 +230,52 @@
 
     The model proposed in \eqref{eq:finalSolution} is valid through the entire \ac{SOC} range, from 0\% to 100\%, as long as $1/ACC(s)$ is continuous in that same range and, since it does not assume any particular format for $ACC(dod)$, it also is fairly independent of battery model.
 
-    This result adds two levels of abstraction to \cite{HAN2014} because it accepts almost any generic form of $ACC(dod)$ without the need to derive a new model. It also uses only the initial and final \ac{SOC} of each half cycle, therefore there's no need to know the power flow of the battery at each instant, only the amount of energy transferred. This provides a faster way to calculate costs in a centralized \ac{EMS}, which was the goal set at the beginning of the formulation.
+    This result adds two levels of abstraction to \cite{HAN2014} because it accepts almost any generic form of $ACC(dod)$ without the need to derive a new model. It also uses only the initial and final \ac{SOC} of each half cycle, therefore there's no need to know the power flow of the battery at each instant, only the amount of energy transferred. Again, this is possible due to our initial assumption of moderate C-rates being used in \acp{MG}. This simplification provides a much faster way to calculate costs in a centralized \ac{EMS}, which was the goal set at the beginning of the formulation.
 
-%    \subsection{Normalized Wear Density Function}
-%    By taking the partial derivative of \eqref{eq:partialSolution} with respect to $s=s_f$ and dividing it by the capacity $M$ of the battery, we arrive at the normalized wear density function:
+    \subsection{Qualitative Analysis: The Normalized Wear Density Function}
+    Although the expression in \eqref{eq:finalSolution} allows an optimization model to quantify the wear of cycling a battery, it fails to provide an easy insight on how cycling the battery at different \ac{SOC} ranges affect its durability. For qualitative analysis, the Wear Cost Density Function, $w(s)$ would provide a better tool to evaluate the performance of a battery.
+    
+    For that, we can simply take the partial derivative of the cost function \ref{eq:finalSolution} with respect to $s=s_f$ and divide it by the capacity $M$ of the battery, arriving at a Normalized Wear Density Function $w_n(s)$ in terms of monetary unit per unit of energy transferred (usually \$/kWh):
+    \small
 %    \begin{equation}
-%        w_n(s) = \frac{w(s)}{M} = - \frac{B_P}{2M} \cdot \frac{d}{ds} \left( \frac{1}{ACC(1-s)} \right)
+		$$ w_n(s) = \frac{w(s)}{M} = \frac{\partial}{\partial s} \frac{- \alpha B_P}{2 \cdot M \cdot ACC(1-s)} $$
 %        \label{eq:wn(s)}
 %    \end{equation}
-%
-%    By substituting \eqref{eq:ACC(dod)} in \eqref{eq:wn(s)} and considering $s \le 1$, the normalized wear density function becomes:
-%    \small
+	\normalsize
+
+    By substituting \eqref{eq:ACC(dod)} into it and considering $ s \le 1 $, the normalized Wear Density Function becomes:
+    \small
+    \begin{equation}
+        w_n(s) = \frac{\alpha B_P}{2M} \cdot \frac{a_1(1-s)^{a_1-1} + a_2(1-s)^{a_1}}{a_0} \cdot \mathrm{e}^{a_2(1-s)}
+        \label{eq:wn(s)a0a1a2}
+    \end{equation}
+	\normalsize
+	
+	This function is able to show where in the \ac{SOC} range the most wear occur. Moreover, the average value of the Wear Density Function is also useful when evaluating the overall cost-benefit of different battery models, as it can differentiate batteries not only by price and capacity, but also by durability. The average value of \eqref{eq:wn(s)a0a1a2} is calculated as:
 %    \begin{equation}
-%        w_n(s) = \frac{B_P}{2M} \cdot \frac{a_1(1-s)^{a_1-1} + a_2(1-s)^{a_1}}{a_0} \cdot \mathrm{e}^{a_2(1-s)}
-%        \label{eq:wn(s)a0a1a2}
+		$$ \overline{w_n} = \frac{\alpha B_P}{2M} \frac{\mathrm{e}^{a_2}}{a_0} $$
 %    \end{equation}
-%	\normalsize
-%
-%    Although the expression in \eqref{eq:finalSolution} yields the wear cost of cycling the battery, it provides little insight on how the \ac{SOC} level impacts the cycle life of a battery. For qualitative analysis, the density function such as \eqref{eq:wn(s)a0a1a2}, provides a tool to evaluate the performance of the battery across multiple \ac{SOC} ranges. Moreover, the average value of the wear density function is also useful when evaluating the overall cost-benefit of different battery models, as it can differentiate batteries not only by price and capacity, but also by durability. The average value of \eqref{eq:wn(s)a0a1a2} is calculated as:
-%    \begin{equation}
-%        \overline{w_n} = \frac{B_P}{2M} \frac{\mathrm{e}^{a_2}}{a_0}
-%    \end{equation}
+	which could also be a useful expression for a linear cost function, such as $C_b(s_0, s_f) = \overline{w_n}  \cdot M \cdot |s_f - s_0|$.
 
     \section{Energy Management Model}
-    To test the battery wear model, we modified the energy management algorithm proposed by \cite{SANTOS2018}, which initially used a fixed cost per kilowatt-hour to evaluate the cost of using the \ac{BESS}. The model implements a day-ahead planning strategy using \ac{MILP} that aims to minimize the operational cost of \iac{MG} composed by a diesel generator, \iac{BESS}, \iac{PV} system and a load, as illustraded by Fig. \ref{fig:mg1}.
+    To test the battery wear model, we modified the optimization problem proposed by \cite{SANTOS2018}, which initially used a fixed cost per kilowatt-hour to evaluate the cost of using the \ac{BESS}. The model implements a day-ahead planning strategy using \ac{MILP} that aims to minimize the operational cost of \iac{MG} composed by a \ac{DG}, \iac{BESS}, \iac{PV} system and a load, as illustrated by Fig. \ref{fig:mg1}.
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.4\textwidth]{figures/mg2.png}
         \caption{Diagram of the simulated \ac{MG}.}
         \label{fig:mg1}
     \end{figure}
-
-    The objective of the optimizer is to calculate setpoints that all DERs within the \ac{MG} should follow in order to supply demand with the lowest operational cost. This may lead to strategies such as charging batteries in off-peak hours to minimize energy purchase during peak-hours, therefore the importance of having a model to quantify battery wear.
+    
+    The objective of the optimizer is to calculate setpoints that all DERs within the \ac{MG} should follow in order to supply demand with the lowest operational cost. This may lead to strategies such as charging batteries in off-peak hours to minimize energy purchase during peak-hours, therefore the importance of having a model to quantify battery wear in the same manner that other sources have, such as fuel cost for \acp{DG} or energy purchase cost from utility grid.
 
     The \ac{MG} is modeled as a single-bus system and, as such, no distribution line losses are considered. The model also does not account for the dynamic behavior of the DERs, as this is an attribution of local controllers. The day-ahead planning is based on predictions of load profiles and solar generation profiles for the following 24 hours, this predictions can be obtained from external APIs that are not the focus of this work (AQUI PODERÍAMOS COLOCAR UMA REFERÊNCIA AO ARTIGO DO PREDITOR DO GHT).
     
     Two electricity tariff levels are considered, one for peak and one for off-peak hours, and also two contracted demand levels for those periods. Reverse power-flow is rewarded with a feed-in tariff that is a fraction of the energy purchase tariff.
 
-    The model uses a discrete-time approach with finer timesteps for the first hour and larger timesteps for the remaining 23 hours. The first half hour is quantized in 6 intervals of 5 minutes each; then there is a single 30 minute interval followed 			aby 23 intervals of 60 minutes each. This ensures higher time-definition for the near-future while also minimizing the amount of equations of the resulting model. This is important for a centralized model in which forecasts are updated and setpoints recalculated every few minutes, a scenario that can be challeging to sustain in a system with a large number of \acp{MG}.
+    The model uses a discrete-time approach with finer timesteps for the first hour and larger timesteps for the remaining 23 hours. The first half hour is quantized in 6 intervals of 5 minutes each; then there is a single 30 minute interval followed by 23 intervals of 60 minutes each. This ensures higher time-definition for the near-future while also minimizing the amount of equations of the resulting model. This is important for a centralized model in which forecasts are updated and setpoints recalculated every few minutes, a scenario that can be challeging to sustain in a system with a large number of \acp{MG}.
 
     \subsection{Objective Function}
+    \label{subsec:obj_func}
     The objective function that defines the optimization problem of this study is the sum of operational costs and energy purchase expenses at each discretization interval:
     \begin{equation}
         Z = \sum_{t=1}^T(Z_{IO}[t] + Z_D[t] + Z_B[t] + Z_P[t])
@@ -289,7 +287,7 @@
         \item $t$: time-discretization index (1, 2, 3...);
         \item $T$: discretization interval count;
         \item $Z_{IO}$: energy import cost ($+$) or export revenue ($-$);
-        \item $Z_{D}$: operational cost of the diesel generator;
+        \item $Z_{D}$: operational cost of the \ac{DG};
         \item $Z_{B}$: battery wear cost; and
         \item $Z_{P}$: penalty for exceeding maximum contracted demand.
     \end{itemize}
@@ -306,7 +304,7 @@
     \begin{equation}
         Z_D[t] = \mu_d \cdot (a^{}_d P_d[t]^{2} + b_dP_d[t] + c_d) \cdot dt[t] + S_d[t]
     \end{equation}
-    where $\mu_d$ is the cost per liter of diesel; $a_d$, $b_d$ and $c_d$ are the consumption parameters of the diesel generator; $P_d[t]$ is the power output variable of the diesel generator; and $S_d[t]$ is the startup cost variable of the generator at each discretization interval, which is zero if the generator has been started at a previous interval or if the power output is zero. The power output of the diesel generator is also subject to minimum and maximum limits.
+    where $\mu_d$ is the cost per liter of diesel; $a_d$, $b_d$ and $c_d$ are the consumption parameters of the \ac{DG}; $P_d[t]$ is the power output variable of the \ac{DG}; and $S_d[t]$ is the startup cost variable of the generator at each discretization interval, which is zero if the generator has been started at a previous interval or if the power output is zero. The power output of the \ac{DG} is also subject to minimum and maximum limits.
 
     \textbf{Maximum demand penalty} --- modeled using a very high tariff for power import:
     \begin{equation}
@@ -325,21 +323,54 @@
 	\normalsize
 
     In order to realize the power balance of the \ac{MG}, the power output of the battery is calculated by converting battery percentage to energy transfer rate, i.e. $P_b[t] = \frac{M(s[t]-s[t-1])}{dt[t]}$, which is negative for battery recharge.
-
-    The complete MINLP model is available on the GitHub repository \href{https://github.com/lucasrhode95/adams}{github.com/lucasrhode95/adams}, where we also made available an application for day-ahead planning simulations.
+    
+    The mathematical modeling is described in detail \cite{SANTOS2018}, with the clear exception of the current battery wear model. For briefness, this work will continue to focus on the battery modeling and the interested reader can refer to the original paper for a detailed explanation of the entire model.
 
     \section{Methodology \& Simulations}
-    Parameters for the simulations were based on commercially available products and average electricity rates in Brazil, converted to US dollars. The diesel generator parameters are from a 22 kVA commercial model; the residential load profile used was acquired from the U.S. Department of Energy public database \cite{DOE2013} and scaled to achieve a consumption of 300 kWh/day; and the \ac{PV} generation is a generic autumn profile, delivering 100 kWh/day. The net load profile (load consumption minus \ac{PV} generation) is shown in Fig. \ref{fig:net-load}, where it can be seen that the \ac{PV} generation exceeds demand from 10 a.m. to 14 a.m.
+    \subsection{Software assistant}
+    To validate the proposed battery model, we tested it under various scenarios, with different \ac{MG} topology, battery models and load profiles. To assist in this process, a software was developed, as illustrated by Figs. \ref{fig:adams1} and \ref{fig:adams2}.
+    \begin{figure}[!h]
+    	\centering
+    	\begin{subfigure}{0.45\textwidth}
+    		\includegraphics[width=\linewidth]{figures/ss1.png}
+    		\caption{Scenario configuration}
+    		\label{fig:adams1}
+    	\end{subfigure}
+    	
+    	\begin{subfigure}{0.45\textwidth}
+    		\includegraphics[width=\linewidth]{figures/ss2.png}
+    		\caption{Simulation results}
+    		\label{fig:adams2}
+    	\end{subfigure}
+    \end{figure}
+	After the user selects which resources the \ac{MG} will contain, the application dynamically generates and solves the optimization problem as described in subsection \ref{subsec:obj_func}. The underlying mathematical model is generated using \ac{MILP} and the user has the option to export the generated code if they want to fine-tune parameters and the behavior of the simulation. The software also also includes an islanded operation mode which is not part of this particular study, but can be useful to test critical scenarios where storing energy is essential. It is free to use and open sourced, available at \href{https://github.com/lucasrhode95/adams}{github.com/lucasrhode95/adams}. All the results presented in this paper were generated using this tool.
+    
+    \subsection{Component parameters selection}
+    Parameters for the simulations were based on commercially available products with public data made available by the manufacturer of each product.
+    
+    \textbf{Energy Sources} -- the \ac{DG} parameters are from a Caterpillar's DE22E3 22 kVA module and the \ac{PV} generation is from a generic autumn profile scaled to deliver 100 kWh/day.
+    
+    As for the utility grid, the average electricity rates in Brazil were used: off-peak prices were set at 0.1048 USD/kWh and peak prices at 0.2096 USD/kWh. Feed-in tariff was set at 0.035 USD/kWh for peak and off-peak hours. The contracted demand at was defined as 23 kW and 18.4 kW for off-peak and peak-hours, respectively. Above these limits, tariffs were defined as 10 USD/kWh for off-peak hours and 20 USD/kWh for peak-hours.
+    
+    \textbf{Load} -- the residential load profile used was obtained from the U.S. Department of Energy public database \cite{DOE2013} and scaled to achieve a consumption of 300 kWh/day.
+    
+    The net load profile (load consumption minus \ac{PV} generation) is shown in Fig. \ref{fig:net-load}, where it can be seen that the \ac{PV} generation exceeds demand from 10 a.m. to 14 a.m., where the "net load" curve becomes negative. In this window it is expected that the \ac{EMS} either chooses to recharge the battery or to export power back into the grid.
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.3\textwidth]{figures/net_load.pdf}
         \caption{Profiles for residential load, \ac{PV} generation and the resulting net load used.}
         \label{fig:net-load}
     \end{figure}
-
-    For batteries, two commercially available options were considered: NeoVolta's NV14 (14.4 kWh) and Rolls' 8 CH 33P (7.12 kWh), hereafter referred as \ac{BESS} A and \ac{BESS} B, respectively.
-
-    The cycle life curve of both systems were shown in Fig. \ref{fig:acc_curves1}, while the wear density of both is shown in Fig. \ref{fig:wn_curves1}, where the lowest wear density points are highlighted: 0.088123 USD/kWh at 87\% \ac{SOC} for \ac{BESS} A, and 0.18287 USD/kWh at 75\% \ac{SOC} for \ac{BESS} B. It also can be observed that wear density increases at both ends of the \ac{SOC}, an expected result given that both very low and very high \ac{SOC} levels are known to reduce battery life \cite{ECKER2014, WIKNER2018}.
+	
+	\textbf{Storage} -- two \ac{BESS} models were considered, with data acquired directly from the manufacturer's website: NeoVolta's NV14 (14.4 kWh) and Rolls' 8 CH 33P (7.12 kWh), referred as \ac{BESS} A and \ac{BESS} B, respectively. The cycle-life curve, $ACC(dod)$, of each system was extracted directly from their datasheet and are presented in Fig. \ref{fig:acc_curves2}:
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.45\textwidth]{figures/acc_curves1.png}
+		\caption{Typical cycle life of \acp{LIB} as function of \ac{DOD} \cite{XU2016}.}
+		\label{fig:acc_curves2}
+	\end{figure}
+    
+    The wear density of both is shown in Fig. \ref{fig:wn_curves1}, where the lowest wear density points are highlighted: 0.088123 USD/kWh at 87\% \ac{SOC} for \ac{BESS} A, and 0.18287 USD/kWh at 75\% \ac{SOC} for \ac{BESS} B. It also can be observed that wear density increases at both ends of the \ac{SOC}, an expected result given that both very low and very high \ac{SOC} levels are known to reduce battery life \cite{ECKER2014, WIKNER2018}.
     \begin{figure}[!h]
         \begin{subfigure}{.235\textwidth}
             \centering
@@ -353,28 +384,24 @@
             \caption{\ac{BESS} B (lead-acid)}
             \label{fig:wn_curves1B}
         \end{subfigure}
-        \caption{Wear density function \eqref{eq:wn(s)a0a1a2} of both batteries.}
+        \caption{Wear Density Function of both batteries.}
         \label{fig:wn_curves1}
     \end{figure}
 
-    For the tests, both systems were considered to have an efficiency of 94\%, a self discharge rate of 0.2 \%/hour and charge/discharge rate was limited to 0.5C.
-
-    As for the electricity tariffs, off-peak prices were set at 0.1048 USD/kWh and peak prices at 0.2096 USD/kWh. Feed-in tariff was set at 0.035 USD/kWh for peak and off-peak hours. The contracted demand at was defined as 23 kW and 18.4 kW for off-peak and peak-hours, respectively. Above these limits, tariffs were defined as 10 USD/kWh for off-peak hours and 20 USD/kWh for peak-hours.
-
-    In order to keep both systems with roughly the same capacity, we considered that \ac{BESS} B is composed of two batteries, therefore doubling its cost and capacity to 13,000 USD and 14.24 kWh, respectively.
-
-    In addition, the \ac{SOC} of both systems were set to start and end at 50\%, so that all energy usage must be replenished before the end of the day, plus losses.
+    For the tests, both systems were considered to have an efficiency of 94\% (yielding a round-trip efficiency of 88.36\%), a self discharge rate of 0.2\% per hour and charge/discharge rate was limited to 0.5C. In order to keep both systems with roughly the same capacity, we considered that \ac{BESS} B is composed of two batteries, therefore doubling its cost and capacity to 13,000 USD and 14.24 kWh, respectively. In addition, the \ac{SOC} of both systems were arbitrarily set to start at 50\%.
+    
+    Another restriction is that battery must also have 50\% \ac{SOC} at the end of the day so that all energy usage must be replenished before the end of the simulation, plus losses.
 
     \subsection{Results}
-    There were four scenarios analyzed with varying composition of \ac{BESS} models and diesel generator availability, always under the same net load presented in Fig. \ref{fig:net-load}. The scenarios analyzed and their respective operational cost for a simulated 24-hour operation were:
+    There were four scenarios analyzed with varying composition of \ac{BESS} models and \ac{DG} availability, always under the same net load presented in Fig. \ref{fig:net-load}. The scenarios analyzed and their respective operational cost for a simulated 24-hour operation were:
     \begin{enumerate}
-        \item \label{item:bessa+diesel} \textbf{Scenario \ref{item:bessa+diesel}:} \ac{BESS} A + diesel generator, 29.7763 USD;
-        \item \label{item:bessb+diesel} \textbf{Scenario \ref{item:bessb+diesel}:} \ac{BESS} B + diesel generator, 30.7006 USD;
+        \item \label{item:bessa+diesel} \textbf{Scenario \ref{item:bessa+diesel}:} \ac{BESS} A + \ac{DG}, 29.7763 USD;
+        \item \label{item:bessb+diesel} \textbf{Scenario \ref{item:bessb+diesel}:} \ac{BESS} B + \ac{DG}, 30.7006 USD;
         \item \label{item:bessb} \textbf{Scenario \ref{item:bessb}:} \ac{BESS} B only, 31.7940 USD;
-        \item \label{item:diesel} \textbf{Scenario \ref{item:diesel}:} Diesel generator only, 30.6420 USD.
+        \item \label{item:diesel} \textbf{Scenario \ref{item:diesel}:} \ac{DG} only, 30.6420 USD.
     \end{enumerate}
 
-    Considering an error tolerance of 1\%, scenarios \ref{item:bessb+diesel} and \ref{item:diesel} are equivalent in regard of operational cost. That is, the addition of \ac{BESS} B to a system where there is already a diesel generator produces no substantial benefit from the energy management perspective alone. However, there are indubitably many advantages of having both systems at disposal and, as such, this result should not be taken as definitive for all cases.
+    Considering an error tolerance of 1\%, scenarios \ref{item:bessb+diesel} and \ref{item:diesel} are equivalent in regard of operational cost. That is, the addition of \ac{BESS} B to a system where there is already a \ac{DG} produces no substantial benefit from the energy management perspective alone. However, there are indubitably many advantages of having both systems at disposal and, as such, this result should not be taken as definitive for all cases.
 
     The detailed results of the day-ahead planning for scenarios \ref{item:bessa+diesel} and \ref{item:bessb+diesel} are shown in Fig. \ref{fig:results}, with the following highlights:
     \begin{figure}[!h]
@@ -408,11 +435,11 @@
     \end{figure}
 
     \begin{itemize}
-        \item \textbf{0 a.m. -- 6 a.m.:} no \ac{PV} generation, load is supplied only by the grid while, in both cases, neither \ac{BESS} nor diesel generator is active. Batteries self discharge at a 0.2\% rate;
+        \item \textbf{0 a.m. -- 6 a.m.:} no \ac{PV} generation, load is supplied only by the grid while, in both cases, neither \ac{BESS} nor \ac{DG} is active. Batteries self discharge at a 0.2\% rate;
         \item \textbf{6 a.m. -- 10 a.m.:} \ac{PV} generation gradually increases, until net load drops to zero;
         \item \textbf{10 a.m. -- 3 p.m.:} \ac{PV} generation continues to increase, surpassing demand. Excess generation is used to charge batteries from 49.0\% to 99.0\% in scenario \ref{item:bessa+diesel} and to 66.0\% in scenario \ref{item:bessb+diesel};
         \item \textbf{3 p.m. -- 6 p.m.:} \ac{PV} generation gradually decreases until zero. Batteries are kept in stand-by;
-        \item \textbf{6 p.m. -- 9 p.m.:} to avoid excess demand and subsequent penalties, \ac{BESS} A is cycled from 99.0\% to 26.2\% to diminish energy purchase in scenario \ref{item:bessa+diesel}, supplying roughly 10.5 kWh to the system. In contrast, in scenario \ref{item:bessb+diesel}, the diesel generator is started at 6 p.m. and stopped at 8 p.m., delivering exactly 32 kWh in two hours. This power output is more than enough to avoid excess demand and also to minimize peak-hour energy purchase --- until the quadratic consumption model limits its benefits. In the following hour, from 8 p.m. until 9 p.m., \ac{BESS} B is cycled from 65.4\% to 50.3\% to supply the system.
+        \item \textbf{6 p.m. -- 9 p.m.:} to avoid excess demand and subsequent penalties, \ac{BESS} A is cycled from 99.0\% to 26.2\% to diminish energy purchase in scenario \ref{item:bessa+diesel}, supplying roughly 10.5 kWh to the system. In contrast, in scenario \ref{item:bessb+diesel}, the \ac{DG} is started at 6 p.m. and stopped at 8 p.m., delivering exactly 32 kWh in two hours. This power output is more than enough to avoid excess demand and also to minimize peak-hour energy purchase --- until the quadratic consumption model limits its benefits. In the following hour, from 8 p.m. until 9 p.m., \ac{BESS} B is cycled from 65.4\% to 50.3\% to supply the system.
         \item \textbf{9 p.m. -- 12 p.m.} the load curve starts to fade to a minimum whilst \ac{BESS} A is recharged in scenario \ref{item:bessa+diesel} and \ac{BESS} B is kept in stand-by until midnight on \ref{item:bessb+diesel}.
     \end{itemize}
 
@@ -421,11 +448,10 @@
     Another interesting result is the choice of \ac{SOC} range that the optimizer made for \ac{BESS} A. The 10.5 kWh that it delivered represents 73\% of its capacity, and could have been cycled in either 100\%-27\% or 73\%-0\% ranges, for example. However, the 99\%-26\% indicates that the optimizer avoided the steep wear density rise near 100\% but also tried to avoid the slowly increasing wear cost near the lower end of the \ac{SOC}. The same trend is observed in scenario \ref{item:bessb+diesel} but, with a much more steep rise near 100\% and overall higher wear cost, the battery is only cycled with a \ac{DOD} little greater than 16\%.
 
     \section{Conclusion}
-    Although battery wear is sometimes neglected in \ac{MG} applications, it is important to incorporate a wear quantification model to avoid abusive use of the storage system. In this study we augmented the reach of a popular model by re-deriving it using a generic approach for fitting the most pervasive cycle life data that is usually made available by manufacturers. We also provided a mathematical formula that enables \ac{MG} planners to evaluate and compare batteries across the entire \ac{SOC} range, taking into account not only price and capacity, but also the durability of storage devices, and that could be easily customized for various batteries. The model, although simple, proved to be very useful in the implementation of an energy management algorithm that considers and minimizes battery wear, as shown by the case studies presented here, which can effectively prolong the lifespan of these devices.
+    Although battery wear is sometimes neglected in \ac{MG} applications, it is important to incorporate a wear quantification model to avoid careless use of the storage system. In this study we expanded the reach of an existing model by re-deriving it using a more universal approach for fitting the data usually made available by manufacturers. We also provided a mathematical formula that enables \ac{MG} planners to evaluate and compare batteries across the entire \ac{SOC} range, taking into account not only price and capacity, but also the durability of storage devices, and that could be easily customized for various batteries. The model, although simple, proved to be very useful in the implementation of an energy management algorithm that considers and minimizes battery wear, as shown by the case studies presented here, which can effectively prolong the lifespan of these devices.
 
     \bibliographystyle{./IEEEtran}
     \bibliography{./bibliography}
 
 \EOD
-
 \end{document}

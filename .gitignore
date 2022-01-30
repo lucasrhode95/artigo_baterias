@@ -54,3 +54,7 @@ Thumbs.db
 *.aux
 access.pdf
 *.out
+access.fdb_latexmk
+access.fls
+access.nlo
+access.idx
