@@ -4,6 +4,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
+\hypersetup{breaklinks=true}
 \usepackage[nolist, printonlyused]{acronym}
 \usepackage{enumerate}
 
@@ -371,7 +372,7 @@
         \label{fig:net-load}
     \end{figure}
 
-	\textbf{Storage} -- two \ac{BESS} models were considered, with data acquired directly from the manufacturer's website: NeoVolta's NV14 (14.4 kWh) and Rolls' 8 CH 33P (7.12 kWh), referred as \ac{BESS} A and \ac{BESS} B, respectively. The cycle-life curve, $ACC(dod)$, of each system was extracted directly from their datasheet and are presented in Fig. \ref{fig:acc(dod)2}. The data points where extracted by inspecting the \ac{ACC} curve charts provided in each datasheet (both available in the manufacturer's website).
+	\textbf{Storage} -- two \ac{BESS} models were considered, with data acquired directly from the manufacturer's website: NeoVolta's NV14 (14.4 kWh) and Rolls' 8 CH 33P (7.12 kWh), referred as \ac{BESS} A and \ac{BESS} B, respectively. The cycle-life curve, $ACC(dod)$, of each system was extracted directly from their datasheet and are presented in Fig. \ref{fig:acc(dod)2}. The data points where extracted by superimposing points over the graphic, relating the graphical coordinates with the indicated axes and performing a curve-fitting. The format used is as proposed in eq. \ref{eq:ACC(dod)}.
 	\begin{figure}[!h]
 		\begin{subfigure}{.235\textwidth}
 			\centering
