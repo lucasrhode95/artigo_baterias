@@ -28,7 +28,7 @@
     \title{A Novel Battery Wear Model For Energy Management In Microgrids}
 
     \author{
-    	\uppercase{Marcos Aurelio Izumida Martins}\authorrefmark{1}
+    	\uppercase{Marcos Aurelio Izumida Martins}\authorrefmark{1}, \IEEEmembership{Senior Member, IEEE}
     	\uppercase{Lucas B. Rhode}\authorrefmark{2},
     	\uppercase{and Adriano B. de Almeida}\authorrefmark{3}
     }
@@ -81,7 +81,7 @@
 
     Model-based methods can be further categorized into \acp{ECM}, \acp{EM} or black box models. \Iac{ECM} can present a highly adaptive approach to achieve particularly accurate wear estimation. In \cite{XIONG2018264}, researchers are able to predict battery performance throughout its entire lifespan with remarkable accuracy, aided by a set of interdependent partial differential equations. The equations describe the reactions that occur in the anode, cathode and separator layer, however the inputs are complex to acquire, which can be detrimental in \ac{EMS} applications, which usually require lightweight solutions.
 
-    In such cenarios, \iac{ECM} can offer a practical way to model both the static and dynamic behavior of cells for battery management in local controllers. This approach is useful since it can be parameterized and implemented to estimate multiple indicators such as \ac{SOC}, \ac{SOH} and power capability, as done in studies \cite{verbrugge2004adaptive, verbrugge2007adaptive}. However, it still demand a great knowledge of battery parameters, their interdependence and external conditions, such as temperature and operational history \cite{zhang2018online}.
+    In such scenarios, \iac{ECM} can offer a practical way to model both the static and dynamic behavior of cells for battery management in local controllers. This approach is useful since it can be parameterized and implemented to estimate multiple indicators such as \ac{SOC}, \ac{SOH} and power capability, as done in studies \cite{verbrugge2004adaptive, verbrugge2007adaptive}. However, it still demand a great knowledge of battery parameters, their interdependence and external conditions, such as temperature and operational history \cite{zhang2018online}.
 
     These approaches can certainly be made highly accurate with increased model complexity and data availability. However, in a centralized \acp{EMS} responsible for managing multiple microgrids across various locations the communication and hardware requirements for acquiring and processing all the necessary data can limit the applicability of these models \cite{DIMEASHATZIARGYRIOU2005}.
 
@@ -479,5 +479,18 @@
     \bibliographystyle{./IEEEtran}
     \bibliography{./bibliography}
 
-\EOD
+    \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/izumida.jpeg}}]{MARCOS AURELIO IZUMIDA MARTINS}
+        (Senior Member, IEEE) received the B.S., M.S. and PhD. degrees in electrical engineering from the Federal University of Santa Catarina, Brazil, in 2005, 2006 and 2020, respectively. From 2006 to 2014, he worked with industry, including research and development of auto matic voltage regulators (AVR), speed governor and static var compensator (SVC) for Toshiba. He is currently a Technical Manager with CERTI Foundation, Brazil. Working with smartgrid innovation projects. His research interests include regulation and policy for microgrids, new solutions for better operation and maintenance for distribution grid, and power electronics for distributed generation.
+    \end{IEEEbiography}
+
+	\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/rhode.png}}]{LUCAS B. RHODE}
+		 was born in Brazil in June 1995. He receive the B.E. from Western Parana State University, Foz do Iguaçu, Brazil in 2019. From 2020 to 2022, he worked as a researcher at CERTI Foundation, where he helped implement innovative solutions with focus on energy management applications for smart grids and electric vehicle charging. Currently, he works as a software engineer at Underwriters Laboratories, performing security tests and certification of electronic devices. His research interests include synchronous machine controllers, power grid monitoring and system stability studies.
+	\end{IEEEbiography}
+
+
+	\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/almeida.jpeg}}]{ADRIANO BATISTA DE ALMEIDA}
+		 received the B.Sc. degree in electrical engineering from the Western Parana State University, in December 2009, the M.Sc. degree in electrical engineering from the Federal University of Itajubá, in March 2011, and the Ph.D. degree from the Federal University of Itajubá, in April 2015. He is currently a Professor of Electrical Engineering at Western Parana State University. His research interests include microgrids control and operation, and power system stability.
+	\end{IEEEbiography}
+
+    \EOD
 \end{document}
